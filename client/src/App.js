@@ -1,29 +1,36 @@
+// React
 import React, { Component } from "react";
 import {
   BrowserRouter as Router,
   Route,
-  Switch,
-  Redirect
+  Switch
+  // Redirect
 } from "react-router-dom";
-import { connect } from "react-redux";
+
+// Routes
+import Navbar from "./components/Navbar/Navbar";
+import Home from "./components/Home/Home";
+import Login from "./components/Login/Login";
+import Register from "./components/Register/Register";
+import Footer from "./components/Footer/footer";
 
 class App extends Component {
   render() {
     //---------------- Private route authentication (check if there is a token in the store)
-    const PrivateRoute = ({ component: Component, ...rest }) => {
-      return (
-        <Route
-          {...rest}
-          render={props => {
-            return this.props.token === true ? (
-              <Component {...props} />
-            ) : (
-              <Redirect to="/" />
-            );
-          }}
-        />
-      );
-    };
+    // const PrivateRoute = ({ component: Component, ...rest }) => {
+    //   return (
+    //     <Route
+    //       {...rest}
+    //       render={props => {
+    //         return this.props.token === true ? (
+    //           <Component {...props} />
+    //         ) : (
+    //           <Redirect to="/" />
+    //         );
+    //       }}
+    //     />
+    //   );
+    // };
 
     return (
       <Router>
@@ -32,6 +39,8 @@ class App extends Component {
             <Navbar />
             <Switch>
               <Route exact path="/" component={Home} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/register" component={Register} />
             </Switch>
           </div>
           <Footer />
