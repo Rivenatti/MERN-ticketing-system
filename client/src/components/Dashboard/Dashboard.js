@@ -11,10 +11,13 @@ import {
   AppBar,
   Tabs,
   Tab,
+  Button,
   Typography,
+  Divider,
   ExpansionPanel,
   ExpansionPanelSummary,
-  ExpansionPanelDetails
+  ExpansionPanelDetails,
+  ExpansionPanelActions
 } from "@material-ui/core";
 import AnnoucementIcon from "@material-ui/icons/Announcement";
 import BuildIcon from "@material-ui/icons/Build";
@@ -28,7 +31,41 @@ import { withStyles } from "@material-ui/core/styles";
 const styles = {
   heading: {
     flexBasis: "33.33%",
-    flexShrink: 0
+    flexShrink: 0,
+    fontSize: 18
+  },
+
+  secondaryHeading: {
+    fontSize: 18
+  },
+
+  expansionBar: {
+    overflow: "hidden",
+    margin: "1vh 0",
+    backgroundColor: "#ddd"
+  },
+
+  expansionPanelDetails: {
+    flexDirection: "column",
+    backgroundColor: "#fff"
+  },
+
+  expansionPanelActions: {
+    backgroundColor: "#fff"
+  },
+
+  ticketDate: {
+    padding: "1vh 0",
+    fontSize: 17
+  },
+
+  ticketStatus: {
+    padding: "1vh 0",
+    fontSize: 17
+  },
+
+  ticketBody: {
+    padding: "2vh 0 0 0"
   }
 };
 
@@ -70,6 +107,7 @@ class Dashboard extends Component {
         <ExpansionPanel
           expanded={expanded === "panel1"}
           onChange={this.handleChange("panel1")}
+          className={classes.expansionBar}
         >
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography className={classes.heading}>Josh Snow</Typography>
@@ -77,12 +115,32 @@ class Dashboard extends Component {
               Internet connection problem.
             </Typography>
           </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <Typography>
-              Nulla facilisi. Phasellus sollicitudin nulla et quam mattis
-              feugiat. Aliquam eget maximus est, id dignissim quam.
+          <ExpansionPanelDetails className={classes.expansionPanelDetails}>
+            <Divider />
+            <Typography className={classes.ticketDate}>
+              Date: 14.12.2018
+            </Typography>
+            <Typography className={classes.ticketStatus}>
+              Status: New
+            </Typography>
+
+            <Typography className={classes.ticketStatus}>
+              Description:
+            </Typography>
+            <Typography variant="body1" className={classes.ticketBody}>
+              I can't reach certain website on my laptop. I can ping it from my
+              command terminal, but my browser always throws an error: "503
+              service unavailable".
             </Typography>
           </ExpansionPanelDetails>
+          <Divider />
+          <ExpansionPanelActions className={classes.expansionPanelActions}>
+            <Button size="small" color="primary">
+              Start
+            </Button>
+
+            <Button size="small">Cancel</Button>
+          </ExpansionPanelActions>
         </ExpansionPanel>
       </>
     );
