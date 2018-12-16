@@ -29,26 +29,16 @@ app.use((req, res, next) => {
   next();
 });
 
-//----- MySQL Connection
-// Require mysql
-const mysql = require("mysql");
-
-// Import MySQL connection config
-const MySQLconf = require("./config/MySQL");
-
-// Connection settings
-const db = mysql.createConnection(MySQLconf);
-
-// Create connection
-db.connect(err => {
-  if (err) console.log("MySQL Error: " + err);
-  else console.log("MySQL connected...");
-});
-
 //----- Routing
 
 // Homepage route
 app.get("/", (req, res) => res.send("Home"));
+
+// Login route
+
+// Register route
+const registerRoute = require("./api/routes/register");
+app.use("/", registerRoute);
 
 //----- Error handling routes
 app.use((req, res, next) => {
