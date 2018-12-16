@@ -4,7 +4,7 @@ const app = express();
 const path = require("path");
 
 //----- Serve static files from the React App
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, "client/build")));
 
 //----- Morgan HTTP request logger middleware
 const morgan = require("morgan");
@@ -29,34 +29,26 @@ app.use((req, res, next) => {
   next();
 });
 
-//----- MongoDB connection
-const mongoose = require("mongoose");
-const MongoDB = require("./config/mongoDB");
+//----- MySQL Connection
+// Require mysql
+const mysql = require("mysql");
 
-mongoose.set("useCreateIndex", true); // Fix DeprecationWarning
-mongoose.connect(
-  // connect from local config file or hosting platform
-  MongoDB,
-  { useNewUrlParser: true },
-  () => console.log("MongoDB connected...")
-);
+// Import MySQL connection config
+const MySQLconf = require("./config/MySQL");
+
+// Connection settings
+const db = mysql.createConnection(MySQLconf);
+
+// Create connection
+db.connect(err => {
+  if (err) console.log("MySQL Error: " + err);
+  else console.log("MySQL connected...");
+});
 
 //----- Routing
 
 // Homepage route
 app.get("/", (req, res) => res.send("Home"));
-
-// Sign up route
-const signUpRoute = require("./api/routes/signup");
-app.use("/", signUpRoute);
-
-// Sign in route
-const signInRoute = require("./api/routes/signin");
-app.use("/", signInRoute);
-
-// Delete route
-const deleteRoute = require("./api/routes/delete");
-app.use("/delete", deleteRoute);
 
 //----- Error handling routes
 app.use((req, res, next) => {
@@ -72,9 +64,8 @@ app.use((error, req, res) => {
 
 //----- Heroku server
 if (process.env.NODE_ENV !== "development") {
-
-  app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname+'/client/build/index.html'));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname + "/client/build/index.html"));
   });
 }
 
