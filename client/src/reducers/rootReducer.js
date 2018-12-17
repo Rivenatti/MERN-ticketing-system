@@ -15,10 +15,16 @@ import onInputBlur from "../utils/onInputBlur";
 
 // Initial state
 const INITIAL_STATE = {
-  // Email input
-  usernameInput: "",
-  usernameInputFocused: false,
-  usernameInputError: false,
+  //----------------- USERS //-----------------
+  // First name input
+  firstNameInput: "",
+  firstNameInputFocused: false,
+  firstNameInputError: false,
+
+  // Last name input
+  lastNameInput: "",
+  lastNameInputFocused: false,
+  lastNameInputError: false,
 
   // Email input
   emailInput: "",
@@ -30,8 +36,13 @@ const INITIAL_STATE = {
   passwordInputFocused: false,
   passwordInputError: false,
 
-  // Server error:
-  serverError: false
+  // Confirm password input
+  confirmPasswordInput: "",
+  confirmPasswordInputFocused: false,
+  confirmPasswordInputError: false,
+
+  // Server errors:
+  serverErrors: []
 };
 
 // Root reducer

@@ -25,8 +25,6 @@ registerUser.post("/register", (req, res) => {
     return res.status(400).json({ message: "Lastname field is empty." });
   else if (!email)
     return res.status(400).json({ message: "Email field is empty." });
-  else if (!phoneNumber)
-    return res.status(400).json({ message: "Phone number field is empty." });
   else if (!password)
     return res.status(400).json({ message: "Password field is empty." });
 
@@ -48,7 +46,6 @@ registerUser.post("/register", (req, res) => {
     firstName: firstName,
     lastName: lastName,
     email: email,
-    phoneNumber: phoneNumber,
     password: password,
     created: new Date()
   };

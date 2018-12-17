@@ -8,22 +8,41 @@ const passwordRegEx = RegExp(
 // Validation
 export default function validate(state, name, value) {
   switch (name) {
-    // -------------------- USERNAME INPUT VALIDATION --------------------
-    case "usernameInput": {
+    // -------------------- FIRSTNAME INPUT VALIDATION --------------------
+    case "firstNameInput": {
       if (usernameRegEx.test(value)) {
         return Object.assign({}, state, {
           [name]: value,
-          usernameInputError: false
+          firstNameInputError: false
         });
       } else if (value === "") {
         return Object.assign({}, state, {
           [name]: value,
-          usernameInputError: false
+          firstNameInputError: false
         });
       } else {
         return Object.assign({}, state, {
           [name]: value,
-          usernameInputError: true
+          firstNameInputError: true
+        });
+      }
+    }
+    // -------------------- LASTNAME INPUT VALIDATION --------------------
+    case "lastNameInput": {
+      if (usernameRegEx.test(value)) {
+        return Object.assign({}, state, {
+          [name]: value,
+          lastNameInputError: false
+        });
+      } else if (value === "") {
+        return Object.assign({}, state, {
+          [name]: value,
+          lastNameInputError: false
+        });
+      } else {
+        return Object.assign({}, state, {
+          [name]: value,
+          lastNameInputError: true
         });
       }
     }
@@ -64,6 +83,26 @@ export default function validate(state, name, value) {
         return Object.assign({}, state, {
           [name]: value,
           passwordInputError: true
+        });
+      }
+    }
+
+    // -------------------- CONFIRM PASSWORD INPUT VALIDATION --------------------
+    case "confirmPasswordInput": {
+      if (value === state.passwordInput) {
+        return Object.assign({}, state, {
+          [name]: value,
+          confirmPasswordInputError: false
+        });
+      } else if (value === "") {
+        return Object.assign({}, state, {
+          [name]: value,
+          confirmPasswordInputError: false
+        });
+      } else {
+        return Object.assign({}, state, {
+          [name]: value,
+          confirmPasswordInputError: true
         });
       }
     }

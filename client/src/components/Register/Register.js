@@ -1,6 +1,7 @@
 // React
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import Api from "../../api/register";
 
 // Redux
 import { connect } from "react-redux";
@@ -63,37 +64,77 @@ class Register extends Component {
         >
           {/* ----- REGISTRATION HEADER ----- */}
           <Typography variant="h4" gutterBottom style={{ textAlign: "center" }}>
-            Create account
+            Create an account
           </Typography>
 
           {/* ----- REGISTRATION FORM ----- */}
-          <form>
-            {/*  USERNAME INPUT  */}
+          <form
+            onSubmit={e =>
+              this.props.handleSubmit(
+                e,
+                this.props.firstNameInput,
+                this.props.lastNameInput,
+                this.props.emailInput,
+                this.props.passwordInput,
+                this.props.history
+              )
+            }
+          >
+            {/*  FIRSTNAME INPUT  */}
             <FormControl
               error={
-                !this.props.usernameInputFocused &&
-                this.props.usernameInputError
+                !this.props.firstNameInputFocused &&
+                this.props.firstNameInputError
               }
               aria-describedby="component-error-text"
               fullWidth
               required
               className={classes.registerInput}
             >
-              <InputLabel htmlFor="component-error">Username</InputLabel>
+              <InputLabel htmlFor="component-error">First name</InputLabel>
               <Input
                 id="component-error"
-                name="usernameInput"
-                value={this.props.usernameInput}
+                name="firstNameInput"
+                value={this.props.firstNameInput}
                 onChange={this.props.inputChanged}
                 onFocus={this.props.inputFocused}
                 onBlur={this.props.inputBlur}
               />
 
-              {/* USERNAME INPUT ERRORS */}
+              {/* FIRSTNAME INPUT ERRORS */}
               <FormHelperText id="component-error-text">
-                {!this.props.usernameInputFocused &&
-                  this.props.usernameInputError &&
-                  "Username format invalid."}
+                {!this.props.firstNameInputFocused &&
+                  this.props.firstNameInputError &&
+                  "First name format invalid."}
+              </FormHelperText>
+            </FormControl>
+
+            {/*  LASTNAME INPUT  */}
+            <FormControl
+              error={
+                !this.props.lastNameInputFocused &&
+                this.props.lastNameInputError
+              }
+              aria-describedby="component-error-text"
+              fullWidth
+              required
+              className={classes.registerInput}
+            >
+              <InputLabel htmlFor="component-error">Last name</InputLabel>
+              <Input
+                id="component-error"
+                name="lastNameInput"
+                value={this.props.lastNameInput}
+                onChange={this.props.inputChanged}
+                onFocus={this.props.inputFocused}
+                onBlur={this.props.inputBlur}
+              />
+
+              {/* LASTNAME INPUT ERRORS */}
+              <FormHelperText id="component-error-text">
+                {!this.props.lastNameInputFocused &&
+                  this.props.lastNameInputError &&
+                  "Last name format invalid."}
               </FormHelperText>
             </FormControl>
 
@@ -155,9 +196,42 @@ class Register extends Component {
               </FormHelperText>
             </FormControl>
 
+            {/*  CONFIRM PASSWORD INPUT  */}
+            <FormControl
+              error={
+                !this.props.confirmPasswordInputFocused &&
+                this.props.confirmPasswordInputError
+              }
+              aria-describedby="component-error-text"
+              fullWidth
+              required
+              className={classes.registerInput}
+            >
+              <InputLabel htmlFor="component-error">
+                Confirm password
+              </InputLabel>
+              <Input
+                id="component-error"
+                name="confirmPasswordInput"
+                type="password"
+                value={this.props.confirmPasswordInput}
+                onChange={this.props.inputChanged}
+                onFocus={this.props.inputFocused}
+                onBlur={this.props.inputBlur}
+              />
+
+              {/* CONFIRM PASSWORD INPUT ERRORS */}
+              <FormHelperText id="component-error-text">
+                {!this.props.confirmPasswordInputFocused &&
+                  this.props.confirmPasswordInputError &&
+                  "Passwords don't match."}
+              </FormHelperText>
+            </FormControl>
+
             {/* REGISTER BUTTON */}
 
             <Button
+              type="submit"
               variant="contained"
               color="secondary"
               className={classes.registerButton}
@@ -186,10 +260,15 @@ class Register extends Component {
 
 const mapStateToProps = state => {
   return {
-    // Username input
-    usernameInput: state.usernameInput,
-    usernameInputFocused: state.usernameInputFocused,
-    usernameInputError: state.usernameInputError,
+    // First name input
+    firstNameInput: state.firstNameInput,
+    firstNameInputFocused: state.firstNameInputFocused,
+    firstNameInputError: state.firstNameInputError,
+
+    // Last name input
+    lastNameInput: state.lastNameInput,
+    lastNameInputFocused: state.lastNameInputFocused,
+    lastNameInputError: state.lastNameInputError,
 
     // Email input
     emailInput: state.emailInput,
@@ -199,22 +278,47 @@ const mapStateToProps = state => {
     // Password input
     passwordInput: state.passwordInput,
     passwordInputFocused: state.passwordInputFocused,
-    passwordInputError: state.passwordInputError
+    passwordInputError: state.passwordInputError,
+
+    // Confirm password input
+    confirmPasswordInput: state.confirmPasswordInput,
+    confirmPasswordInputFocused: state.confirmPasswordInputFocused,
+    confirmPasswordInputError: state.confirmPasswordInputError
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     onMountResetState: () => dispatch({ type: RESET_STATE }),
-    inputFocused: e => dispatch({ type: INPUT_FOCUSED, name: e.target.name }),
-    inputBlur: e => dispatch({ type: INPUT_BLUR, name: e.target.name }),
+    inputFocused: event =>
+      dispatch({ type: INPUT_FOCUSED, name: event.target.name }),
+    inputBlur: event => dispatch({ type: INPUT_BLUR, name: event.target.name }),
 
-    inputChanged: e => {
+    inputChanged: event => {
       dispatch({
         type: INPUT_CHANGED,
-        name: e.target.name,
-        value: e.target.value
+        name: event.target.name,
+        value: event.target.value
       });
+    },
+
+    handleSubmit: (
+      event,
+      _firstNameInput,
+      _lastNameInput,
+      _emailInput,
+      _passwordInput,
+      _history
+    ) => {
+      event.preventDefault();
+      Api.register(
+        dispatch,
+        _firstNameInput,
+        _lastNameInput,
+        _emailInput,
+        _passwordInput,
+        _history
+      );
     }
   };
 };
