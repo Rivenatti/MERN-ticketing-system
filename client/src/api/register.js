@@ -1,4 +1,5 @@
 import axios from "axios";
+import { HANDLE_ERROR } from "../actions/actions";
 
 const register = (dispatch, firstName, lastName, email, password, history) => {
   axios
@@ -10,11 +11,11 @@ const register = (dispatch, firstName, lastName, email, password, history) => {
       history
     })
     .then(res => {
-      // Redirect user to sign in page after success
-      history.push("/signin");
+      // Redirect user to login page after success
+      history.push("/login");
     })
     .catch(error => {
-      console.log(error.response);
+      dispatch({ type: HANDLE_ERROR, message: error.response.data.message });
     });
 };
 

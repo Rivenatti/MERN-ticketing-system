@@ -3,7 +3,9 @@ import {
   INPUT_CHANGED,
   INPUT_FOCUSED,
   INPUT_BLUR,
-  RESET_STATE
+  RESET_STATE,
+  HANDLE_ERROR,
+  SNACKBAR_CLOSE
 } from "../actions/actions";
 
 // Validation script
@@ -42,20 +44,26 @@ const INITIAL_STATE = {
   confirmPasswordInputError: false,
 
   // Server errors:
-  serverErrors: []
+  serverErrors: [],
+
+  // Snackbar for server errors:
+  snackbarOpen: true
 };
 
 // Root reducer
 const rootReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    // After component switch reset state
     case RESET_STATE: {
       return Object.assign({}, state, { ...INITIAL_STATE });
     }
 
+    // Form input focused
     case INPUT_FOCUSED: {
       return onInputFocus(state, action.name);
     }
 
+    // Form input blur
     case INPUT_BLUR: {
       return onInputBlur(state, action.name);
     }
@@ -63,6 +71,21 @@ const rootReducer = (state = INITIAL_STATE, action) => {
     // On login/register form input change handler with validation
     case INPUT_CHANGED: {
       return validate(state, action.name, action.value);
+    }
+
+    // On server error set it in the state
+    case HANDLE_ERROR: {
+      return Object.assign({}, state, {
+        ...state.serverErrors,
+        serverErrors: action.message
+      });
+    }
+
+    case SNACKBAR_CLOSE: {
+      return Object.assign({}, state, {
+        snackbarOpen: false,
+        serverErrors: []
+      });
     }
 
     default: {

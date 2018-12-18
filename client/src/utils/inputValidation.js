@@ -69,6 +69,10 @@ export default function validate(state, name, value) {
 
     // -------------------- PASSWORD INPUT VALIDATION --------------------
     case "passwordInput": {
+      // Clear confirm password input
+      state.confirmPasswordInput = "";
+      state.confirmPasswordInputError = false;
+
       if (passwordRegEx.test(value)) {
         return Object.assign({}, state, {
           [name]: value,

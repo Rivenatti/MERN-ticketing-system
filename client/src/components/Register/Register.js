@@ -9,7 +9,8 @@ import {
   RESET_STATE,
   INPUT_FOCUSED,
   INPUT_BLUR,
-  INPUT_CHANGED
+  INPUT_CHANGED,
+  SNACKBAR_CLOSE
 } from "../../actions/actions";
 
 // Material-UI
@@ -20,9 +21,14 @@ import {
   FormControl,
   Input,
   FormHelperText,
-  Button
+  Button,
+  Snackbar,
+  SnackbarContent,
+  IconButton
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import ErrorIcon from "@material-ui/icons/Error";
+import CloseIcon from "@material-ui/icons/Close";
 
 // Material UI custom styles
 const styles = {
@@ -41,10 +47,24 @@ const styles = {
   link: {
     textDecoration: "none",
     color: "#1a73e8"
+  },
+
+  snakbar: {
+    backgroundColor: "#d32f2f"
+  },
+
+  message: {
+    display: "flex",
+    alignItems: "center"
+  },
+
+  errorIcon: {
+    marginRight: "1rem"
   }
 };
 
 class Register extends Component {
+  // Reset state on mounting
   componentWillMount = () => {
     this.props.onMountResetState();
   };
@@ -62,6 +82,42 @@ class Register extends Component {
           lg={2}
           className={classes.registerItem}
         >
+          {/* ----- SERVER ERRORS SNACKBAR ----- */}
+
+          {this.props.serverErrors.length === 0 ? null : (
+            <Snackbar
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "center"
+              }}
+              open={this.props.snackbarOpen}
+              autoHideDuration={5000}
+              onClose={this.props.handleSnackbarClose}
+            >
+              <SnackbarContent
+                className={classes.snakbar}
+                aria-describedby="client-snackbar"
+                message={
+                  <span id="client-snackbar" className={classes.message}>
+                    <ErrorIcon className={classes.errorIcon} />
+                    {this.props.serverErrors}
+                  </span>
+                }
+                action={[
+                  <IconButton
+                    key="close"
+                    aria-label="Close"
+                    color="inherit"
+                    className={classes.close}
+                    onClick={this.props.handleSnackbarClose}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                ]}
+              />
+            </Snackbar>
+          )}
+
           {/* ----- REGISTRATION HEADER ----- */}
           <Typography variant="h4" gutterBottom style={{ textAlign: "center" }}>
             Create an account
@@ -80,7 +136,7 @@ class Register extends Component {
               )
             }
           >
-            {/*  FIRSTNAME INPUT  */}
+            {/* -------------------- FIRST NAME INPUT --------------------*/}
             <FormControl
               error={
                 !this.props.firstNameInputFocused &&
@@ -109,7 +165,7 @@ class Register extends Component {
               </FormHelperText>
             </FormControl>
 
-            {/*  LASTNAME INPUT  */}
+            {/* -------------------- LAST NAME INPUT --------------------*/}
             <FormControl
               error={
                 !this.props.lastNameInputFocused &&
@@ -138,7 +194,7 @@ class Register extends Component {
               </FormHelperText>
             </FormControl>
 
-            {/*  EMAIL INPUT  */}
+            {/* -------------------- EMAIL INPUT --------------------*/}
             <FormControl
               error={
                 !this.props.emailInputFocused && this.props.emailInputError
@@ -166,7 +222,7 @@ class Register extends Component {
               </FormHelperText>
             </FormControl>
 
-            {/*  PASSWORD INPUT  */}
+            {/* -------------------- PASSWORD INPUT --------------------*/}
             <FormControl
               error={
                 !this.props.passwordInputFocused &&
@@ -196,7 +252,7 @@ class Register extends Component {
               </FormHelperText>
             </FormControl>
 
-            {/*  CONFIRM PASSWORD INPUT  */}
+            {/* -------------------- CONFIRM PASSWORD INPUT --------------------*/}
             <FormControl
               error={
                 !this.props.confirmPasswordInputFocused &&
@@ -228,7 +284,7 @@ class Register extends Component {
               </FormHelperText>
             </FormControl>
 
-            {/* REGISTER BUTTON */}
+            {/* -------------------- REGISTER BUTTON --------------------*/}
 
             <Button
               type="submit"
@@ -236,9 +292,23 @@ class Register extends Component {
               color="secondary"
               className={classes.registerButton}
               fullWidth
+              disabled={
+                this.props.firstNameInput === "" ||
+                this.props.firstNameInputError ||
+                this.props.lastNameInput === "" ||
+                this.props.lastNameInputError ||
+                this.props.emailInput === "" ||
+                this.props.emailInputError ||
+                this.props.passwordInput === "" ||
+                this.props.passwordInputError ||
+                this.props.confirmPasswordInput === "" ||
+                this.props.confirmPasswordInputError ||
+                this.props.serverErrors.length !== 0
+              }
             >
               Register
             </Button>
+            {console.log(this.props)}
           </form>
 
           {/* ALREADY REGISTERED LINK */}
@@ -283,7 +353,13 @@ const mapStateToProps = state => {
     // Confirm password input
     confirmPasswordInput: state.confirmPasswordInput,
     confirmPasswordInputFocused: state.confirmPasswordInputFocused,
-    confirmPasswordInputError: state.confirmPasswordInputError
+    confirmPasswordInputError: state.confirmPasswordInputError,
+
+    // Server errors
+    serverErrors: state.serverErrors,
+
+    // Snackbar for server errors:
+    snackbarOpen: state.snackbarOpen
   };
 };
 
@@ -310,7 +386,13 @@ const mapDispatchToProps = dispatch => {
       _passwordInput,
       _history
     ) => {
+      // Prevent window from reloading
       event.preventDefault();
+
+      // Reset form inputs state
+      dispatch({ type: RESET_STATE });
+
+      // Pass the data to registration api
       Api.register(
         dispatch,
         _firstNameInput,
@@ -319,6 +401,10 @@ const mapDispatchToProps = dispatch => {
         _passwordInput,
         _history
       );
+    },
+
+    handleSnackbarClose: e => {
+      dispatch({ type: SNACKBAR_CLOSE });
     }
   };
 };
