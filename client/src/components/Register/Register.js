@@ -125,9 +125,9 @@ class Register extends Component {
 
           {/* ----- REGISTRATION FORM ----- */}
           <form
-            onSubmit={e =>
+            onSubmit={event =>
               this.props.handleSubmit(
-                e,
+                event,
                 this.props.firstNameInput,
                 this.props.lastNameInput,
                 this.props.emailInput,

@@ -35,6 +35,8 @@ app.use((req, res, next) => {
 app.get("/", (req, res) => res.send("Home"));
 
 // Login route
+const loginRoute = require("./api/routes/login");
+app.use("/", loginRoute);
 
 // Register route
 const registerRoute = require("./api/routes/register");

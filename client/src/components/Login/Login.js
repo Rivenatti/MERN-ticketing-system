@@ -1,6 +1,7 @@
 // React
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import Api from "../../api/login";
 
 // Redux
 import { connect } from "react-redux";
@@ -60,7 +61,16 @@ class Login extends Component {
           </Typography>
 
           {/* ----- LOGIN__INPUTS ----- */}
-          <form>
+          <form
+            onSubmit={event =>
+              this.props.handleSubmit(
+                event,
+                this.props.emailInput,
+                this.props.passwordInput,
+                this.props.history
+              )
+            }
+          >
             {/*  EMAIL INPUT  */}
             <FormControl
               error={
@@ -122,6 +132,7 @@ class Login extends Component {
             {/* LOGIN BUTTON */}
 
             <Button
+              type="submit"
               variant="contained"
               color="secondary"
               className={classes.loginButton}
@@ -158,7 +169,13 @@ const mapStateToProps = state => {
     // Password input
     passwordInput: state.passwordInput,
     passwordInputFocused: state.passwordInputFocused,
-    passwordInputError: state.passwordInputError
+    passwordInputError: state.passwordInputError,
+
+    // Server errors
+    serverErrors: state.serverErrors,
+
+    // Snackbar for server errors:
+    snackbarOpen: state.snackbarOpen
   };
 };
 
@@ -174,6 +191,17 @@ const mapDispatchToProps = dispatch => {
         name: e.target.name,
         value: e.target.value
       });
+    },
+
+    handleSubmit: (event, _emailInput, _passwordInput, _history) => {
+      // Prevent window from reloading
+      event.preventDefault();
+
+      // Reset form inputs state
+      dispatch({ type: RESET_STATE });
+
+      // Pass the data to registration api
+      Api.login(dispatch, _emailInput, _passwordInput, _history);
     }
   };
 };

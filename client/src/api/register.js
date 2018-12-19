@@ -10,7 +10,7 @@ const register = (dispatch, firstName, lastName, email, password, history) => {
       password,
       history
     })
-    .then(res => {
+    .then(result => {
       // Redirect user to login page after success
       history.push("/login");
     })

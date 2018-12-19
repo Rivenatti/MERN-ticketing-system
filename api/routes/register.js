@@ -16,7 +16,7 @@ const checkIfEmailExistsQuery = require("../MySQL_queries/registration/checkIfEm
 // Create route to '/register'
 registerUser.post("/register", (req, res) => {
   // Assign request values to the variables
-  const { firstName, lastName, email, phoneNumber, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
 
   // Check if all required fields are filled in
   if (!firstName)
