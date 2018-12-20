@@ -1,4 +1,3 @@
-console.log("in");
 // Require express router
 const userLogin = require("express").Router();
 

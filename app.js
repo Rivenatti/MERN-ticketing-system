@@ -10,6 +10,10 @@ app.use(express.static(path.join(__dirname, "client/build")));
 const morgan = require("morgan");
 app.use(morgan("dev"));
 
+// Enable cookie parsing
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+
 //----- Enable body parsing of incoming requests
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -18,6 +22,7 @@ app.use(bodyParser.json());
 //----- Cross-Origin Resource Sharing
 app.use((req, res, next) => {
   res.header("Access-Controll-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Credentials", true);
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
