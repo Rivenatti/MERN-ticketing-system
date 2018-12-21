@@ -47,6 +47,7 @@ registerUser.post("/register", (req, res) => {
     lastName: lastName,
     email: email,
     password: password,
+    role: "user",
     created: new Date()
   };
 

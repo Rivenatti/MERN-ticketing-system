@@ -100,7 +100,7 @@ class Register extends Component {
                 message={
                   <span id="client-snackbar" className={classes.message}>
                     <ErrorIcon className={classes.errorIcon} />
-                    {this.props.serverErrors}
+                    {this.props.serverErrors[0].error}
                   </span>
                 }
                 action={[
@@ -308,7 +308,6 @@ class Register extends Component {
             >
               Register
             </Button>
-            {console.log(this.props)}
           </form>
 
           {/* ALREADY REGISTERED LINK */}

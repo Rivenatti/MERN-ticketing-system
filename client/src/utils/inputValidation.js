@@ -1,5 +1,5 @@
 // Regular expressions
-const usernameRegEx = RegExp(/^[a-zA-Z0-9_-]{4,16}$/);
+const usernameRegEx = RegExp(/^[a-zA-Z0-9_-]{4,25}$/);
 const emailRegEx = RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
 const passwordRegEx = RegExp(
   /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{4,}$/

@@ -9,7 +9,8 @@ import {
   RESET_STATE,
   INPUT_FOCUSED,
   INPUT_BLUR,
-  INPUT_CHANGED
+  INPUT_CHANGED,
+  SNACKBAR_CLOSE
 } from "../../actions/actions";
 
 // Material-UI
@@ -20,9 +21,14 @@ import {
   FormControl,
   Input,
   FormHelperText,
-  Button
+  Button,
+  Snackbar,
+  SnackbarContent,
+  IconButton
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import ErrorIcon from "@material-ui/icons/Error";
+import CloseIcon from "@material-ui/icons/Close";
 
 // Material UI custom styles
 const styles = {
@@ -41,6 +47,19 @@ const styles = {
   link: {
     textDecoration: "none",
     color: "#1a73e8"
+  },
+
+  snakbar: {
+    backgroundColor: "#d32f2f"
+  },
+
+  message: {
+    display: "flex",
+    alignItems: "center"
+  },
+
+  errorIcon: {
+    marginRight: "1rem"
   }
 };
 
@@ -55,6 +74,41 @@ class Login extends Component {
       <Grid container>
         <Grid item xs={1} sm={3} md={4} lg={5} />
         <Grid item xs={10} sm={6} md={4} lg={2} className={classes.loginItem}>
+          {/* ----- SERVER ERRORS SNACKBAR ----- */}
+          {this.props.serverErrors.length === 0 ? null : (
+            <Snackbar
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "center"
+              }}
+              open={this.props.snackbarOpen}
+              autoHideDuration={5000}
+              onClose={this.props.handleSnackbarClose}
+            >
+              <SnackbarContent
+                className={classes.snakbar}
+                aria-describedby="client-snackbar"
+                message={
+                  <span id="client-snackbar" className={classes.message}>
+                    <ErrorIcon className={classes.errorIcon} />
+                    {this.props.serverErrors[0].error}
+                  </span>
+                }
+                action={[
+                  <IconButton
+                    key="close"
+                    aria-label="Close"
+                    color="inherit"
+                    className={classes.close}
+                    onClick={this.props.handleSnackbarClose}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                ]}
+              />
+            </Snackbar>
+          )}
+
           {/* ----- LOGIN__HEADER ----- */}
           <Typography variant="h4" gutterBottom style={{ textAlign: "center" }}>
             Let's get started
@@ -202,6 +256,10 @@ const mapDispatchToProps = dispatch => {
 
       // Pass the data to registration api
       Api.login(dispatch, _emailInput, _passwordInput, _history);
+    },
+
+    handleSnackbarClose: e => {
+      dispatch({ type: SNACKBAR_CLOSE });
     }
   };
 };

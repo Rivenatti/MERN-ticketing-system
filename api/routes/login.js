@@ -28,8 +28,6 @@ userLogin.post("/login", (req, res, next) => {
 
   // Check if given email already exists
   MySQLConnection.query(checkIfEmailExistsQuery(email), (err, result) => {
-    // Set result to first object of the returned object array
-    result = result[0];
     // Error handling
     if (err) res.status(500).json({ message: err });
     // If email doesn't exist show message
@@ -37,14 +35,13 @@ userLogin.post("/login", (req, res, next) => {
       res.status(409).json({ message: "Authentication failed." });
     // If email exists continoue
     else {
+      // Set result to first object of the returned object array
+      result = result[0];
       // Compare requested password with user password
       bcrypt.compare(password, result.password, (err, result) => {
-        // If comparing fails
-        if (err)
-          return res.status(401).json({ error: "Authentication failed." });
+        if (err) return res.status(401).json({ message: "Bcrypt error." });
         else if (result) {
           // If success, assign token
-
           const token = jwt.sign(
             {
               userId: result.userID,
@@ -62,7 +59,10 @@ userLogin.post("/login", (req, res, next) => {
           return res
             .status(200)
             .json({ message: "Authentication successful", token: token });
-        } else return res.status(401).json({ error: "Authentication failed." });
+        }
+
+        // If comparing fails
+        else return res.status(401).json({ message: "Authentication failed." });
       });
     }
   });

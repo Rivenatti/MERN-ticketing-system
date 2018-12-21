@@ -76,11 +76,11 @@ const rootReducer = (state = INITIAL_STATE, action) => {
     // On server error set it in the state
     case HANDLE_ERROR: {
       return Object.assign({}, state, {
-        ...state.serverErrors,
-        serverErrors: action.message
+        serverErrors: [...state.serverErrors, { error: action.message }]
       });
     }
 
+    // Component's snackbar close handler
     case SNACKBAR_CLOSE: {
       return Object.assign({}, state, {
         snackbarOpen: false,
