@@ -17,7 +17,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 
 class App extends Component {
   render() {
-    //---------------- Private route authentication (check if there is a token in the store)
+    //---------------- Private admin route authentication (check if there is a token in the store)
     // const PrivateRoute = ({ component: Component, ...rest }) => {
     //   return (
     //     <Route

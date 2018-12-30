@@ -1,5 +1,5 @@
 import axios from "axios";
-import { HANDLE_ERROR } from "../actions/actions";
+import { HANDLE_ERROR, LOGGED_IN } from "../actions/actions";
 import cookie from "react-cookies";
 
 // Sign in api request
@@ -21,6 +21,10 @@ const login = (dispatch, email, password, history) => {
       expires.setTime(expires.getTime() + 60 * 60 * 1000);
 
       cookie.save("token", result.data.token, { expires });
+
+      dispatch({ type: LOGGED_IN, token: result.data.token });
+
+      history.push("/");
     })
     .catch(error =>
       // Set the errors in the store

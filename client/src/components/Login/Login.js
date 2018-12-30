@@ -191,6 +191,13 @@ class Login extends Component {
               color="secondary"
               className={classes.loginButton}
               fullWidth
+              disabled={
+                this.props.emailInput === "" ||
+                this.props.emailInputError ||
+                this.props.passwordInput === "" ||
+                this.props.passwordInputError ||
+                this.props.serverErrors.length !== 0
+              }
             >
               login
             </Button>
@@ -216,20 +223,20 @@ class Login extends Component {
 const mapStateToProps = state => {
   return {
     // Email input
-    emailInput: state.emailInput,
-    emailInputFocused: state.emailInputFocused,
-    emailInputError: state.emailInputError,
+    emailInput: state.loginAndRegisterReducer.emailInput,
+    emailInputFocused: state.loginAndRegisterReducer.emailInputFocused,
+    emailInputError: state.loginAndRegisterReducer.emailInputError,
 
     // Password input
-    passwordInput: state.passwordInput,
-    passwordInputFocused: state.passwordInputFocused,
-    passwordInputError: state.passwordInputError,
+    passwordInput: state.loginAndRegisterReducer.passwordInput,
+    passwordInputFocused: state.loginAndRegisterReducer.passwordInputFocused,
+    passwordInputError: state.loginAndRegisterReducer.passwordInputError,
 
     // Server errors
-    serverErrors: state.serverErrors,
+    serverErrors: state.loginAndRegisterReducer.serverErrors,
 
     // Snackbar for server errors:
-    snackbarOpen: state.snackbarOpen
+    snackbarOpen: state.loginAndRegisterReducer.snackbarOpen
   };
 };
 

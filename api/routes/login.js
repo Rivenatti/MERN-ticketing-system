@@ -38,9 +38,9 @@ userLogin.post("/login", (req, res, next) => {
       // Set result to first object of the returned object array
       result = result[0];
       // Compare requested password with user password
-      bcrypt.compare(password, result.password, (err, result) => {
+      bcrypt.compare(password, result.password, (err, confirm) => {
         if (err) return res.status(401).json({ message: "Bcrypt error." });
-        else if (result) {
+        else if (confirm) {
           // If success, assign token
           const token = jwt.sign(
             {
@@ -48,7 +48,8 @@ userLogin.post("/login", (req, res, next) => {
               firstName: result.firstName,
               lastName: result.lastName,
               email: result.email,
-              created: result.created
+              created: result.created,
+              role: result.role
             },
             secret,
             {
@@ -56,9 +57,10 @@ userLogin.post("/login", (req, res, next) => {
             }
           );
           // Send response
+
           return res
             .status(200)
-            .json({ message: "Authentication successful", token: token });
+            .json({ message: "Authentication successful", token });
         }
 
         // If comparing fails

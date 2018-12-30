@@ -330,35 +330,37 @@ class Register extends Component {
 const mapStateToProps = state => {
   return {
     // First name input
-    firstNameInput: state.firstNameInput,
-    firstNameInputFocused: state.firstNameInputFocused,
-    firstNameInputError: state.firstNameInputError,
+    firstNameInput: state.loginAndRegisterReducer.firstNameInput,
+    firstNameInputFocused: state.loginAndRegisterReducer.firstNameInputFocused,
+    firstNameInputError: state.loginAndRegisterReducer.firstNameInputError,
 
     // Last name input
-    lastNameInput: state.lastNameInput,
-    lastNameInputFocused: state.lastNameInputFocused,
-    lastNameInputError: state.lastNameInputError,
+    lastNameInput: state.loginAndRegisterReducer.lastNameInput,
+    lastNameInputFocused: state.loginAndRegisterReducer.lastNameInputFocused,
+    lastNameInputError: state.loginAndRegisterReducer.lastNameInputError,
 
     // Email input
-    emailInput: state.emailInput,
-    emailInputFocused: state.emailInputFocused,
-    emailInputError: state.emailInputError,
+    emailInput: state.loginAndRegisterReducer.emailInput,
+    emailInputFocused: state.loginAndRegisterReducer.emailInputFocused,
+    emailInputError: state.loginAndRegisterReducer.emailInputError,
 
     // Password input
-    passwordInput: state.passwordInput,
-    passwordInputFocused: state.passwordInputFocused,
-    passwordInputError: state.passwordInputError,
+    passwordInput: state.loginAndRegisterReducer.passwordInput,
+    passwordInputFocused: state.loginAndRegisterReducer.passwordInputFocused,
+    passwordInputError: state.loginAndRegisterReducer.passwordInputError,
 
     // Confirm password input
-    confirmPasswordInput: state.confirmPasswordInput,
-    confirmPasswordInputFocused: state.confirmPasswordInputFocused,
-    confirmPasswordInputError: state.confirmPasswordInputError,
+    confirmPasswordInput: state.loginAndRegisterReducer.confirmPasswordInput,
+    confirmPasswordInputFocused:
+      state.loginAndRegisterReducer.confirmPasswordInputFocused,
+    confirmPasswordInputError:
+      state.loginAndRegisterReducer.confirmPasswordInputError,
 
     // Server errors
-    serverErrors: state.serverErrors,
+    serverErrors: state.loginAndRegisterReducer.serverErrors,
 
     // Snackbar for server errors:
-    snackbarOpen: state.snackbarOpen
+    snackbarOpen: state.loginAndRegisterReducer.snackbarOpen
   };
 };
 
