@@ -1,7 +1,8 @@
 import jwt_decode from "jwt-decode";
+import cookie from "react-cookies";
 
 // Actions
-import { LOGGED_IN } from "../actions/actions";
+import { LOGGED_IN, LOGGED_OUT } from "../actions/actions";
 
 // Initial state
 const INITIAL_STATE = {
@@ -10,10 +11,10 @@ const INITIAL_STATE = {
   token: false,
 
   // User role
-  role: "user"
+  role: null
 };
 
-const loginAndRegisterReducer = (state = INITIAL_STATE, action) => {
+const loggedInReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     // After user logs in, set the token state, user role and remove errors if any
     case LOGGED_IN: {
@@ -25,10 +26,21 @@ const loginAndRegisterReducer = (state = INITIAL_STATE, action) => {
       });
     }
 
+    case LOGGED_OUT: {
+      // Remove token from the browser
+      cookie.remove("token");
+
+      // Reset the state
+      return Object.assign({}, state, {
+        token: false,
+        role: null
+      });
+    }
+
     default: {
       return state;
     }
   }
 };
 
-export default loginAndRegisterReducer;
+export default loggedInReducer;

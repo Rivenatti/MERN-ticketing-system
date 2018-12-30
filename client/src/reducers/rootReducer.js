@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import loginAndRegisterReducer from "./loginAndRegisterReducer";
-import loggedInReducer from "./loggedInReducer";
+import loggerReducer from "./loggerReducer";
 
 // Actions
 import { RESET_STATE } from "../actions/actions";
@@ -12,7 +12,7 @@ const INITIAL_STATE = {
   token: false,
 
   // User role
-  role: "user"
+  role: null
 };
 
 const rootReducer = (state = INITIAL_STATE, action) => {
@@ -29,5 +29,5 @@ const rootReducer = (state = INITIAL_STATE, action) => {
 export default combineReducers({
   rootReducer,
   loginAndRegisterReducer,
-  loggedInReducer
+  loggerReducer
 });

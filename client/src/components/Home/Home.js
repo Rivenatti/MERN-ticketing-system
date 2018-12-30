@@ -29,6 +29,7 @@ const styles = {
 class Home extends Component {
   render() {
     const { classes } = this.props;
+    console.log(this.props);
     return (
       <Grid container className={classes.container}>
         <Grid item xs={1} sm={3} />
@@ -93,8 +94,8 @@ class Home extends Component {
 
 const mapStateToProps = state => {
   return {
-    token: state.loggedInReducer.token,
-    role: state.loggedInReducer.role
+    token: state.loggerReducer.token,
+    role: state.loggerReducer.role
   };
 };
 

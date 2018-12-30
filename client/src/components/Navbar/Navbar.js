@@ -49,6 +49,7 @@ class Navbar extends Component {
     const { classes } = this.props;
     const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
+
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -90,11 +91,11 @@ class Navbar extends Component {
                   </Link>
                   {/* SIGN OUT LINK */}
                   <Link
-                    to="/signout"
+                    to="/logout"
                     className={classes.link}
                     onClick={this.props.onSubmit}
                   >
-                    <MenuItem onClick={this.handleClose}>Sign out</MenuItem>
+                    <MenuItem onClick={this.handleClose}>Logout</MenuItem>
                   </Link>
                 </Menu>
               </div>
@@ -108,7 +109,7 @@ class Navbar extends Component {
 
 const mapStateToProps = state => {
   return {
-    token: state.token
+    token: state.loggerReducer.token
   };
 };
 
