@@ -3,9 +3,10 @@ import React, { Component } from "react";
 import {
   BrowserRouter as Router,
   Route,
-  Switch
-  // Redirect
+  Switch,
+  Redirect
 } from "react-router-dom";
+import { connect } from "react-redux";
 
 // Routes
 import Navbar from "./components/Navbar/Navbar";
@@ -18,21 +19,21 @@ import Logout from "./components/Logout/Logout";
 
 class App extends Component {
   render() {
-    //---------------- Private admin route authentication (check if there is a token in the store)
-    // const PrivateRoute = ({ component: Component, ...rest }) => {
-    //   return (
-    //     <Route
-    //       {...rest}
-    //       render={props => {
-    //         return this.props.token === true ? (
-    //           <Component {...props} />
-    //         ) : (
-    //           <Redirect to="/" />
-    //         );
-    //       }}
-    //     />
-    //   );
-    // };
+    // ---------------- Private route authentication
+    const PrivateRoute = ({ component: Component, ...rest }) => {
+      return (
+        <Route
+          {...rest}
+          render={props => {
+            return this.props.token === true ? (
+              <Component {...props} />
+            ) : (
+              <Redirect to="/" />
+            );
+          }}
+        />
+      );
+    };
 
     return (
       <Router>
@@ -41,10 +42,10 @@ class App extends Component {
             <Navbar />
             <Switch>
               <Route exact path="/" component={Home} />
-              <Route exact path="/dashboard" component={Dashboard} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
-              <Route exact path="/logout" component={Logout} />
+              <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              <PrivateRoute exact path="/logout" component={Logout} />
             </Switch>
           </div>
           <Footer />
@@ -54,4 +55,10 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    token: state.loggerReducer.token
+  };
+};
+
+export default connect(mapStateToProps)(App);

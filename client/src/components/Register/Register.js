@@ -64,9 +64,12 @@ const styles = {
 };
 
 class Register extends Component {
-  // Reset state on mounting
   componentWillMount = () => {
+    // Reset previous inputs state
     this.props.onMountResetState();
+
+    // If user is logged in, redirect to home
+    if (this.props.token) this.props.history.push("/");
   };
 
   render() {
@@ -329,6 +332,9 @@ class Register extends Component {
 
 const mapStateToProps = state => {
   return {
+    // Token
+    token: state.loggerReducer.token,
+
     // First name input
     firstNameInput: state.loginAndRegisterReducer.firstNameInput,
     firstNameInputFocused: state.loginAndRegisterReducer.firstNameInputFocused,
