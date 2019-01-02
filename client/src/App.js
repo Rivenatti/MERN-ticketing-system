@@ -14,7 +14,8 @@ import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import Footer from "./components/Footer/footer";
-import Dashboard from "./components/Dashboard/Dashboard";
+import UserDashboard from "./components/UserDashboard/UserDashboard";
+import AdminDashboard from "./components/AdminDashboard/AdminDashboard";
 import Logout from "./components/Logout/Logout";
 
 class App extends Component {
@@ -44,7 +45,13 @@ class App extends Component {
               <Route exact path="/" component={Home} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
-              <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              <PrivateRoute
+                exact
+                path="/admin-dashboard"
+                component={AdminDashboard}
+              />
+              v
+              <PrivateRoute exact path="/dashboard" component={UserDashboard} />
               <PrivateRoute exact path="/logout" component={Logout} />
             </Switch>
           </div>

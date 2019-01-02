@@ -7,8 +7,7 @@ const register = (dispatch, firstName, lastName, email, password, history) => {
       firstName,
       lastName,
       email,
-      password,
-      history
+      password
     })
     .then(result => {
       // Redirect user to login page after success

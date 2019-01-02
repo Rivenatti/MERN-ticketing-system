@@ -69,7 +69,7 @@ const styles = {
   }
 };
 
-class Dashboard extends Component {
+class AdminDashboard extends Component {
   state = {
     expanded: null
   };
@@ -160,4 +160,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(Dashboard));
+)(withStyles(styles)(AdminDashboard));

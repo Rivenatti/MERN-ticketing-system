@@ -1,13 +1,14 @@
 import { combineReducers } from "redux";
 import loginAndRegisterReducer from "./loginAndRegisterReducer";
 import loggerReducer from "./loggerReducer";
+import ticketReducer from "./ticketReducer";
 
 // Actions
 import { RESET_STATE } from "../actions/actions";
 
 // Initial state
 const INITIAL_STATE = {
-  //----------------- USERS -----------------
+  //----------------- USER -----------------
   // User token status
   token: false,
 
@@ -29,5 +30,6 @@ const rootReducer = (state = INITIAL_STATE, action) => {
 export default combineReducers({
   rootReducer,
   loginAndRegisterReducer,
-  loggerReducer
+  loggerReducer,
+  ticketReducer
 });
