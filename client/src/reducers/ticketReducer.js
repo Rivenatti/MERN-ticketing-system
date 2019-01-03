@@ -1,5 +1,9 @@
 // Actions
-import { TICKET_INPUT_CHANGED, RESET_STATE } from "../actions/actions";
+import {
+  TICKET_INPUT_CHANGED,
+  GET_USER_TICKETS,
+  RESET_STATE
+} from "../actions/actions";
 
 // Initial state
 const INITIAL_STATE = {
@@ -12,7 +16,9 @@ const INITIAL_STATE = {
   description: "",
 
   // Date of creation 'dd-mm-yyyy'
-  created: new Date()
+  created: new Date(),
+
+  userTickets: []
 };
 
 const ticketReducer = (state = INITIAL_STATE, action) => {
@@ -21,6 +27,10 @@ const ticketReducer = (state = INITIAL_STATE, action) => {
       return Object.assign({}, state, {
         [action.name]: action.value
       });
+    }
+
+    case GET_USER_TICKETS: {
+      return Object.assign({}, state, { userTickets: action.tickets });
     }
 
     case RESET_STATE: {

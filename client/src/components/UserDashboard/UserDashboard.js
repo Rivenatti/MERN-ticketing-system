@@ -1,7 +1,8 @@
 // React
 import React, { Component } from "react";
 // import { Link } from "react-router-dom";
-import Api from "../../api/createTicket";
+import createTicketApi from "../../api/createTicket";
+import getUserTicketsApi from "../../api/getUserTickets";
 
 // Redux
 import { connect } from "react-redux";
@@ -122,10 +123,13 @@ class AdminDashboard extends Component {
     const { classes } = this.props;
     const { activeTab, expanded } = this.state;
 
+    this.props.userTickets.length === 0 &&
+      this.props.getTickets(this.props.userID);
+    console.log(this.props);
+
     return (
       <>
         {/* ---------- "MY TICKETS" TAB ---------- */}
-
         <AppBar position="static" color="default">
           <Tabs
             value={activeTab}
@@ -141,44 +145,60 @@ class AdminDashboard extends Component {
         </AppBar>
         {activeTab === 0 && (
           <div>
-            <ExpansionPanel
-              expanded={expanded === "panel1"}
-              onChange={this.handleChange("panel1")}
-              className={classes.expansionBar}
-            >
-              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography className={classes.heading}>Josh Snow</Typography>
-                <Typography className={classes.secondaryHeading}>
-                  Internet connection problem.
-                </Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails className={classes.expansionPanelDetails}>
-                <Divider />
-                <Typography className={classes.ticketDate}>
-                  Date: 14.12.2018
-                </Typography>
-                <Typography className={classes.ticketStatus}>
-                  Status: New
-                </Typography>
+            {this.props.userTickets.map(ticket => {
+              return (
+                <div>
+                  <ExpansionPanel
+                    expanded={expanded === "panel1"}
+                    onChange={this.handleChange("panel1")}
+                    className={classes.expansionBar}
+                  >
+                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                      <Typography className={classes.heading}>Me</Typography>
+                      <Typography className={classes.secondaryHeading}>
+                        {ticket.title}
+                      </Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails
+                      className={classes.expansionPanelDetails}
+                    >
+                      <Divider />
+                      <Typography className={classes.ticketDate}>
+                        Date:{" "}
+                        {ticket.dateOfCreation
+                          .split("T")[0]
+                          .split("-")
+                          .reverse()
+                          .join("-")}
+                      </Typography>
+                      <Typography className={classes.ticketStatus}>
+                        Status: {ticket.status}
+                      </Typography>
 
-                <Typography className={classes.ticketStatus}>
-                  Description:
-                </Typography>
-                <Typography variant="body1" className={classes.ticketBody}>
-                  I can't reach certain website on my laptop. I can ping it from
-                  my command terminal, but my browser always throws an error:
-                  "503 service unavailable".
-                </Typography>
-              </ExpansionPanelDetails>
-              <Divider />
-              <ExpansionPanelActions className={classes.expansionPanelActions}>
-                <Button size="small" color="primary">
-                  Start
-                </Button>
+                      <Typography className={classes.ticketStatus}>
+                        Description:
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        className={classes.ticketBody}
+                      >
+                        {ticket.description}
+                      </Typography>
+                    </ExpansionPanelDetails>
+                    <Divider />
+                    <ExpansionPanelActions
+                      className={classes.expansionPanelActions}
+                    >
+                      <Button size="small" color="primary">
+                        Edit
+                      </Button>
 
-                <Button size="small">Cancel</Button>
-              </ExpansionPanelActions>
-            </ExpansionPanel>
+                      <Button size="small">Cancel</Button>
+                    </ExpansionPanelActions>
+                  </ExpansionPanel>
+                </div>
+              );
+            })}
           </div>
         )}
 
@@ -192,7 +212,7 @@ class AdminDashboard extends Component {
                   <div className={classes.formWrapper}>
                     {/* FORM TITLE */}
                     <Typography variant="h5">Create new ticket</Typography>
-                    {console.log(this.props)}
+
                     {/* FORM */}
                     <form
                       onSubmit={event =>
@@ -248,7 +268,6 @@ class AdminDashboard extends Component {
             <Grid item xs={1} sm={3} md={4} />
           </>
         )}
-        {console.log(this.props)}
       </>
     );
   }
@@ -259,7 +278,8 @@ const mapStateToProps = state => {
     ticketTitle: state.ticketReducer.title,
     ticketDescription: state.ticketReducer.description,
     ticketCreationDate: state.ticketReducer.created,
-    userID: state.loggerReducer.userID
+    userID: state.loggerReducer.userID,
+    userTickets: state.ticketReducer.userTickets
   };
 };
 
@@ -290,7 +310,7 @@ const mapDispatchToProps = dispatch => {
         type: RESET_STATE
       });
 
-      Api.createTicket(
+      createTicketApi.createTicket(
         dispatch,
         _userID,
         _title,
@@ -299,6 +319,10 @@ const mapDispatchToProps = dispatch => {
         _status,
         _history
       );
+    },
+
+    getTickets: userID => {
+      return getUserTicketsApi.getUserTickets(dispatch, userID);
     }
   };
 };

@@ -20,10 +20,13 @@ const createTicket = (
     })
     .then(result => {
       // Redirect user to dashboard page after success
-      history.push("/dashboard");
+      return history.push("/dashboard");
     })
     .catch(error => {
-      dispatch({ type: HANDLE_ERROR, message: error.response.data.message });
+      return dispatch({
+        type: HANDLE_ERROR,
+        message: error.response.data.message
+      });
     });
 };
 
