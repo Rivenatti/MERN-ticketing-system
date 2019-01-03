@@ -192,13 +192,13 @@ class AdminDashboard extends Component {
                   <div className={classes.formWrapper}>
                     {/* FORM TITLE */}
                     <Typography variant="h5">Create new ticket</Typography>
-
+                    {console.log(this.props)}
                     {/* FORM */}
                     <form
                       onSubmit={event =>
                         this.props.handleSubmit(
                           event,
-                          `${this.props.firstName} ${this.props.lastName}`,
+                          this.props.userID,
                           this.props.ticketTitle,
                           this.props.ticketDescription,
                           this.props.ticketCreationDate,
@@ -259,8 +259,7 @@ const mapStateToProps = state => {
     ticketTitle: state.ticketReducer.title,
     ticketDescription: state.ticketReducer.description,
     ticketCreationDate: state.ticketReducer.created,
-    firstName: state.loggerReducer.firstName,
-    lastName: state.loggerReducer.lastName
+    userID: state.loggerReducer.userID
   };
 };
 
@@ -278,7 +277,7 @@ const mapDispatchToProps = dispatch => {
 
     handleSubmit: (
       event,
-      _creator,
+      _userID,
       _title,
       _description,
       _dateOfCreation,
@@ -293,7 +292,7 @@ const mapDispatchToProps = dispatch => {
 
       Api.createTicket(
         dispatch,
-        _creator,
+        _userID,
         _title,
         _description,
         _dateOfCreation,

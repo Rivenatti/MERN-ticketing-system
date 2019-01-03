@@ -3,7 +3,7 @@ import { HANDLE_ERROR } from "../actions/actions";
 
 const createTicket = (
   dispatch,
-  creator,
+  userID,
   title,
   description,
   dateOfCreation,
@@ -12,7 +12,7 @@ const createTicket = (
 ) => {
   axios
     .post("/createTicket", {
-      creator,
+      userID,
       title,
       description,
       dateOfCreation,

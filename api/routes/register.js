@@ -8,7 +8,6 @@ const bcrypt = require("bcryptjs");
 const MySQLConnection = require("../../config/MySQL");
 
 // Import MySQL queries
-const createUsersTableQuery = require("../MySQL_queries/registration/createUsersTableQuery");
 const checkIfUsersTableExistsQuery = require("../MySQL_queries/registration/checkIfUsersTableExistsQuery");
 const insertUserQuery = require("../MySQL_queries/registration/insertUserQuery");
 const checkIfEmailExistsQuery = require("../MySQL_queries/registration/checkIfEmailExistsQuery");
@@ -28,53 +27,58 @@ registerUser.post("/register", (req, res) => {
   else if (!password)
     return res.status(400).json({ message: "Password field is empty." });
 
-  // Check if user table exists in the database
+  // Check if users table exists in the database
   MySQLConnection.query(checkIfUsersTableExistsQuery, (err, result) => {
     // Error handling
     if (err) res.status(500).json({ message: err });
-    // If users table doesn't exist, create one
+    // If users table doesn't exist, throw error message
     else if (result.length === 0) {
-      MySQLConnection.query(createUsersTableQuery, (err, result) => {
-        if (err) res.status(500).json({ message: err });
-        else res.status(201).json({ message: "Users table has been created." });
-      });
-    }
-  });
+      res
+        .status(400)
+        .json({ message: "Users table doesn't exist in the database." });
+    } else {
+      // Create new user object
+      const newUser = {
+        firstName,
+        lastName,
+        email,
+        password,
+        role: "user",
+        created: new Date()
+      };
 
-  // Create new user object
-  const newUser = {
-    firstName: firstName,
-    lastName: lastName,
-    email: email,
-    password: password,
-    role: "user",
-    created: new Date()
-  };
-
-  // Check if given email already exists
-  MySQLConnection.query(checkIfEmailExistsQuery(email), (err, result) => {
-    // Error handling
-    if (err) res.status(500).json({ message: err });
-    // If email exists show message
-    else if (result.length > 0)
-      res.status(409).json({ message: "Given email already exists." });
-    // If email doesn't exist add new user to the database
-    else {
-      // Encrypt the password
-      bcrypt.genSalt(10, (err, salt) => {
+      // Check if given email already exists
+      MySQLConnection.query(checkIfEmailExistsQuery(email), (err, result) => {
+        // Error handling
         if (err) res.status(500).json({ message: err });
+        // If email exists show message
+        else if (result.length > 0)
+          res.status(409).json({ message: "Given email already exists." });
+        // If email doesn't exist add new user to the database
         else {
-          bcrypt.hash(newUser.password, salt, (err, hash) => {
+          // Encrypt the password
+          bcrypt.genSalt(10, (err, salt) => {
             if (err) res.status(500).json({ message: err });
             else {
-              newUser.password = hash;
-
-              // Insert user
-              MySQLConnection.query(insertUserQuery, newUser, (err, result) => {
-                // Error handling
+              bcrypt.hash(newUser.password, salt, (err, hash) => {
                 if (err) res.status(500).json({ message: err });
-                else
-                  res.status(201).json({ message: "User has been created." });
+                else {
+                  newUser.password = hash;
+
+                  // Insert new user to the db
+                  MySQLConnection.query(
+                    insertUserQuery,
+                    newUser,
+                    (err, result) => {
+                      // Error handling
+                      if (err) res.status(500).json({ message: err });
+                      else
+                        res
+                          .status(201)
+                          .json({ message: "User has been created." });
+                    }
+                  );
+                }
               });
             }
           });

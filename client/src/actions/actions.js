@@ -18,4 +18,3 @@ export const LOGGED_OUT = "LOGGED_OUT";
 
 // Tickets
 export const TICKET_INPUT_CHANGED = "TICKET_INPUT_CHANGED";
-export const CREATE_NEW_TICKET = "CREATE_NEW_TICKET";

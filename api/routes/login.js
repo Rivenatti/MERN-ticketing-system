@@ -16,7 +16,7 @@ const MySQLConnection = require("../../config/MySQL");
 // Import MySQL queries
 const checkIfEmailExistsQuery = require("../MySQL_queries/registration/checkIfEmailExistsQuery");
 
-// Create route to specified user by URL params id
+// Create route to '/login'
 userLogin.post("/login", (req, res, next) => {
   // Assign request values to the variables
   const { email, password } = req.body;
@@ -33,7 +33,7 @@ userLogin.post("/login", (req, res, next) => {
     // If email doesn't exist show message
     else if (result.length === 0)
       res.status(409).json({ message: "Authentication failed." });
-    // If email exists continoue
+    // If email exists continue
     else {
       // Set result to first object of the returned object array
       result = result[0];
@@ -44,7 +44,7 @@ userLogin.post("/login", (req, res, next) => {
           // If success, assign token
           const token = jwt.sign(
             {
-              userId: result.userID,
+              userID: result.userID,
               firstName: result.firstName,
               lastName: result.lastName,
               email: result.email,

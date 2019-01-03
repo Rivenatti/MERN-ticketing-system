@@ -1,5 +1,5 @@
 // Actions
-import { TICKET_INPUT_CHANGED, CREATE_NEW_TICKET } from "../actions/actions";
+import { TICKET_INPUT_CHANGED, RESET_STATE } from "../actions/actions";
 
 // Initial state
 const INITIAL_STATE = {
@@ -13,11 +13,6 @@ const INITIAL_STATE = {
 
   // Date of creation 'dd-mm-yyyy'
   created: new Date()
-    .toISOString()
-    .split("T")[0]
-    .split("-")
-    .reverse()
-    .join("-")
 };
 
 const ticketReducer = (state = INITIAL_STATE, action) => {
@@ -28,8 +23,8 @@ const ticketReducer = (state = INITIAL_STATE, action) => {
       });
     }
 
-    case CREATE_NEW_TICKET: {
-      return Object.assign({}, state, { creator: action.creator });
+    case RESET_STATE: {
+      return Object.assign({}, state, INITIAL_STATE);
     }
 
     default: {

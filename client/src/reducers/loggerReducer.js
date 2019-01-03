@@ -25,10 +25,10 @@ const loggedInReducer = (state = INITIAL_STATE, action) => {
     // After user logs in, set the token state, user role and remove errors if any
     case LOGGED_IN: {
       const decoded = jwt_decode(action.token);
+      console.log(decoded);
       return Object.assign({}, state, {
         token: true,
-        firstName: decoded.firstName,
-        lastName: decoded.lastName,
+        userID: decoded.userID,
         role: decoded.role,
         serverErrors: []
       });
