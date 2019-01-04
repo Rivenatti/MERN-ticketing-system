@@ -55,6 +55,10 @@ app.use("/", createTicketRoute);
 const getUserTicketsRoute = require("./api/routes/getUserTickets");
 app.use("/", getUserTicketsRoute);
 
+// Edit ticket route
+const userTicketEdit = require("./api/routes/getTicket");
+app.use("/", userTicketEdit);
+
 //----- Error handling routes
 app.use((req, res, next) => {
   const error = new Error("Error 404: Page not found.");

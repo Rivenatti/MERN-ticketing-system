@@ -129,6 +129,7 @@ class AdminDashboard extends Component {
 
     return (
       <>
+        {console.log(this.props)}
         {/* ---------- "MY TICKETS" TAB ---------- */}
         <AppBar position="static" color="default">
           <Tabs
@@ -147,10 +148,10 @@ class AdminDashboard extends Component {
           <div>
             {this.props.userTickets.map(ticket => {
               return (
-                <div>
+                <div key={ticket.ticketID}>
                   <ExpansionPanel
-                    expanded={expanded === "panel1"}
-                    onChange={this.handleChange("panel1")}
+                    expanded={expanded === ticket.ticketID}
+                    onChange={this.handleChange(ticket.ticketID)}
                     className={classes.expansionBar}
                   >
                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -189,10 +190,15 @@ class AdminDashboard extends Component {
                     <ExpansionPanelActions
                       className={classes.expansionPanelActions}
                     >
-                      <Button size="small" color="primary">
+                      <Button
+                        size="small"
+                        color="primary"
+                        onClick={() =>
+                          this.props.history.push(`/edit/${ticket.ticketID}`)
+                        }
+                      >
                         Edit
                       </Button>
-
                       <Button size="small">Cancel</Button>
                     </ExpansionPanelActions>
                   </ExpansionPanel>
@@ -304,8 +310,6 @@ const mapDispatchToProps = dispatch => {
       _status,
       _history
     ) => {
-      event.preventDefault();
-
       dispatch({
         type: RESET_STATE
       });
