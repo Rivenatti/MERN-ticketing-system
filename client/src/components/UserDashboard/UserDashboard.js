@@ -9,7 +9,11 @@ import deleteTicketApi from "../../api/deleteTicket";
 import { connect } from "react-redux";
 
 // Actions
-import { RESET_STATE, TICKET_INPUT_CHANGED } from "../../actions/actions";
+import {
+  RESET_STATE,
+  TICKET_INPUT_CHANGED,
+  TICKET_DIALOG_OPEN
+} from "../../actions/actions";
 
 // Material-UI
 import {
@@ -95,11 +99,10 @@ const styles = {
   }
 };
 
-class AdminDashboard extends Component {
+class UserDashboard extends Component {
   state = {
     expanded: null,
-    activeTab: 0,
-    dialogOpen: false
+    activeTab: 0
   };
 
   // On mounting reset previous state
@@ -128,11 +131,6 @@ class AdminDashboard extends Component {
   // Handle new ticket form submit
   handleSubmit = event => {
     event.preventDefault();
-  };
-
-  // Delete ticket confirmation dialog
-  handleDialogOpen = () => {
-    this.setState({ dialogOpen: !this.state.dialogOpen });
   };
 
   render() {
@@ -213,10 +211,17 @@ class AdminDashboard extends Component {
                         Edit
                       </Button>
 
-                      <Button size="small" onClick={this.handleDialogOpen}>
+                      <Button
+                        size="small"
+                        onClick={() =>
+                          this.props.handleDialogOpen(ticket.ticketID)
+                        }
+                      >
                         <Dialog
-                          open={this.state.dialogOpen}
-                          onClose={this.handleDialogOpen}
+                          open={ticket.dialogOpen}
+                          onClose={() =>
+                            this.props.handleDialogOpen(ticket.ticketID)
+                          }
                           aria-labelledby="alert-dialog-title"
                           aria-describedby="alert-dialog-description"
                         >
@@ -244,7 +249,9 @@ class AdminDashboard extends Component {
                             {/* Disagree button */}
 
                             <Button
-                              onClick={this.handleDialogOpen}
+                              onClick={() =>
+                                this.props.handleDialogOpen(ticket.ticketID)
+                              }
                               color="primary"
                             >
                               Disagree
@@ -384,6 +391,10 @@ const mapDispatchToProps = dispatch => {
       return getUserTicketsApi.getUserTickets(dispatch, userID);
     },
 
+    handleDialogOpen: ticketID => {
+      return dispatch({ type: TICKET_DIALOG_OPEN, ticketID });
+    },
+
     deleteTicket: (ticketID, history) => {
       return deleteTicketApi.deleteTicket(dispatch, ticketID, history);
     }
@@ -393,4 +404,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(AdminDashboard));
+)(withStyles(styles)(UserDashboard));

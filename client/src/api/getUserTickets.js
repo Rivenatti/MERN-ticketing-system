@@ -7,9 +7,13 @@ async function getUserTickets(dispatch, userID) {
       userID
     })
     .then(result => {
+      let tickets = result.data.tickets.map(ticket => {
+        return Object.assign({}, ticket, { dialogOpen: false });
+      });
+
       return dispatch({
         type: GET_USER_TICKETS,
-        tickets: result.data.tickets
+        tickets
       });
     })
     .catch(error => {
