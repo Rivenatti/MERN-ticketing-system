@@ -55,8 +55,12 @@ app.use("/", createTicketRoute);
 const getUserTicketsRoute = require("./api/routes/getUserTickets");
 app.use("/", getUserTicketsRoute);
 
+// Get ticket route
+const getTicketRoute = require("./api/routes/getTicket");
+app.use("/", getTicketRoute);
+
 // Edit ticket route
-const userTicketEdit = require("./api/routes/getTicket");
+const userTicketEdit = require("./api/routes/editTicket");
 app.use("/", userTicketEdit);
 
 //----- Error handling routes

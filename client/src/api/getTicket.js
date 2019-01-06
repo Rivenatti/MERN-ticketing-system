@@ -3,7 +3,7 @@ import { HANDLE_ERROR, GET_TICKET } from "../actions/actions";
 
 async function getTicket(dispatch, ticketID) {
   await axios
-    .post(`/edit/${ticketID}`, {
+    .post(`/get/${ticketID}`, {
       ticketID
     })
     .then(result => {

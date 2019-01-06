@@ -1,22 +1,12 @@
 import axios from "axios";
 import { HANDLE_ERROR } from "../actions/actions";
 
-const createTicket = (
-  dispatch,
-  userID,
-  title,
-  description,
-  dateOfCreation,
-  status,
-  history
-) => {
+const editTicket = (dispatch, ticketID, title, description, history) => {
+  console.log(ticketID);
   axios
-    .post("/editTicket/:id", {
-      userID,
+    .post(`/edit/${ticketID}`, {
       title,
-      description,
-      dateOfCreation,
-      status
+      description
     })
     .then(result => {
       // Redirect user to dashboard page after success
@@ -30,4 +20,4 @@ const createTicket = (
     });
 };
 
-export default { createTicket };
+export default { editTicket };

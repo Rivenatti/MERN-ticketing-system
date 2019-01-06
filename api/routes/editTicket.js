@@ -6,10 +6,13 @@ const MySQLConnection = require("../../config/MySQL");
 
 // Import MySQL queries
 const checkIfTicketsTableExistsQuery = require("../MySQL_queries/ticket/checkIfTicketsTableExistsQuery");
-const getTicketQuery = require("../MySQL_queries/ticket/getTicketQuery");
+const editTicketQuery = require("../MySQL_queries/ticket/editTicketQuery");
 
-// Create route to '/get/:id'
-userTicketEdit.post("/get/:id", (req, res, next) => {
+// Create route to '/edit/:id'
+userTicketEdit.post("/edit/:id", (req, res, next) => {
+  // Assign request values to the variables
+  const { title, description } = req.body;
+
   // Check if tickets table exists in the database
   MySQLConnection.query(checkIfTicketsTableExistsQuery, (err, result) => {
     // Error handling
@@ -20,12 +23,21 @@ userTicketEdit.post("/get/:id", (req, res, next) => {
         .status(400)
         .json({ message: "Tickets table doesn't exist in the database." });
     } else {
-      // Get ticket data from the db
-      MySQLConnection.query(getTicketQuery(req.params.id), (err, result) => {
-        // Error handling
-        if (err) res.status(500).json({ message: err });
-        else res.status(201).json({ ticket: result });
-      });
+      // edit ticket row in the db
+      MySQLConnection.query(
+        editTicketQuery(
+          req.params.id,
+          title,
+          description,
+          new Date().toISOString(),
+          "edited"
+        ),
+        (err, result) => {
+          // Error handling
+          if (err) console.log(err);
+          else res.status(201).json({ ticket: result });
+        }
+      );
     }
   });
 });

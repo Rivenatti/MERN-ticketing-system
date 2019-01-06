@@ -114,7 +114,7 @@ class UserTicketEdit extends Component {
 
 const mapStateToProps = state => {
   return {
-    ticketID: state.ticketReducer.ticketID,
+    ticketID: state.ticketReducer.id,
     ticketTitle: state.ticketReducer.title,
     ticketDescription: state.ticketReducer.description,
     ticketCreationDate: state.ticketReducer.created
@@ -144,6 +144,8 @@ const mapDispatchToProps = dispatch => {
       _status,
       _history
     ) => {
+      event.preventDefault();
+
       dispatch({
         type: RESET_STATE
       });
