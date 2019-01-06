@@ -3,6 +3,7 @@ import React, { Component } from "react";
 // import { Link } from "react-router-dom";
 import createTicketApi from "../../api/createTicket";
 import getUserTicketsApi from "../../api/getUserTickets";
+import deleteTicketApi from "../../api/deleteTicket";
 
 // Redux
 import { connect } from "react-redux";
@@ -24,7 +25,10 @@ import {
   ExpansionPanelActions,
   Paper,
   TextField,
-  Grid
+  Grid,
+  Dialog,
+  DialogTitle,
+  DialogActions
 } from "@material-ui/core";
 import AnnoucementIcon from "@material-ui/icons/Announcement";
 import AddIcon from "@material-ui/icons/AddCircle";
@@ -94,7 +98,8 @@ const styles = {
 class AdminDashboard extends Component {
   state = {
     expanded: null,
-    activeTab: 0
+    activeTab: 0,
+    dialogOpen: false
   };
 
   // On mounting reset previous state
@@ -117,6 +122,11 @@ class AdminDashboard extends Component {
   // Handle new ticket form submit
   handleSubmit = event => {
     event.preventDefault();
+  };
+
+  // Delete ticket confirmation dialog
+  handleDialogOpen = () => {
+    this.setState({ dialogOpen: !this.state.dialogOpen });
   };
 
   render() {
@@ -199,7 +209,47 @@ class AdminDashboard extends Component {
                       >
                         Edit
                       </Button>
-                      <Button size="small">Cancel</Button>
+
+                      <Button size="small" onClick={this.handleDialogOpen}>
+                        <Dialog
+                          open={this.state.dialogOpen}
+                          onClose={this.handleDialogOpen}
+                          aria-labelledby="alert-dialog-title"
+                          aria-describedby="alert-dialog-description"
+                        >
+                          {/* Dialog title */}
+
+                          <DialogTitle id="alert-dialog-title">
+                            {"Are you sure you want to delete this ticket?"}
+                          </DialogTitle>
+                          <DialogActions>
+                            {/* Agree button */}
+
+                            <Button
+                              onClick={() =>
+                                this.props.deleteTicket(
+                                  ticket.ticketID,
+                                  this.props.history
+                                )
+                              }
+                              color="primary"
+                              autoFocus
+                            >
+                              Agree
+                            </Button>
+
+                            {/* Disagree button */}
+
+                            <Button
+                              onClick={this.handleDialogOpen}
+                              color="primary"
+                            >
+                              Disagree
+                            </Button>
+                          </DialogActions>
+                        </Dialog>
+                        Delete
+                      </Button>
                     </ExpansionPanelActions>
                   </ExpansionPanel>
                 </div>
@@ -327,6 +377,10 @@ const mapDispatchToProps = dispatch => {
 
     getTickets: userID => {
       return getUserTicketsApi.getUserTickets(dispatch, userID);
+    },
+
+    deleteTicket: (ticketID, history) => {
+      return deleteTicketApi.deleteTicket(dispatch, ticketID, history);
     }
   };
 };

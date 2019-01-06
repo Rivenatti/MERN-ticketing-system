@@ -63,6 +63,10 @@ app.use("/", getTicketRoute);
 const userTicketEdit = require("./api/routes/editTicket");
 app.use("/", userTicketEdit);
 
+// Delete ticket route
+const userTicketDelete = require("./api/routes/deleteTicket");
+app.use("/", userTicketDelete);
+
 //----- Error handling routes
 app.use((req, res, next) => {
   const error = new Error("Error 404: Page not found.");
