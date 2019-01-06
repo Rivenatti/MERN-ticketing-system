@@ -2,6 +2,7 @@ import axios from "axios";
 import { HANDLE_ERROR } from "../actions/actions";
 
 const editTicket = (dispatch, ticketID, title, description, history) => {
+  console.log(history);
   axios
     .post(`/edit/${ticketID}`, {
       title,

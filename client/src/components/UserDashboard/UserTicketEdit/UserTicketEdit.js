@@ -37,12 +37,11 @@ const styles = {
 
 class UserTicketEdit extends Component {
   componentDidMount = () => {
-    this.props.getTicket(1);
+    this.props.getTicket(this.props.match.params.id);
   };
 
   render() {
     const { classes } = this.props;
-    console.log(this.props);
     return (
       <>
         <Grid container>
@@ -155,8 +154,6 @@ const mapDispatchToProps = dispatch => {
         _ticketID,
         _title,
         _description,
-        _dateOfCreation,
-        _status,
         _history
       );
     }

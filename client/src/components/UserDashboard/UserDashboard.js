@@ -107,6 +107,12 @@ class AdminDashboard extends Component {
     this.props.onMountResetState();
   };
 
+  // Get user tickets array
+  componentDidMount = () => {
+    this.props.userTickets.length === 0 &&
+      this.props.getTickets(this.props.userID);
+  };
+
   // Active tab change
   handleActiveChange = (event, activeTab) => {
     this.setState({ activeTab });
@@ -133,13 +139,10 @@ class AdminDashboard extends Component {
     const { classes } = this.props;
     const { activeTab, expanded } = this.state;
 
-    this.props.userTickets.length === 0 &&
-      this.props.getTickets(this.props.userID);
     console.log(this.props);
 
     return (
       <>
-        {console.log(this.props)}
         {/* ---------- "MY TICKETS" TAB ---------- */}
         <AppBar position="static" color="default">
           <Tabs
