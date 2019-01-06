@@ -8,8 +8,9 @@ const MySQLConnection = require("../../config/MySQL");
 const checkIfTicketsTableExistsQuery = require("../MySQL_queries/ticket/checkIfTicketsTableExistsQuery");
 const insertTicketQuery = require("../MySQL_queries/ticket/insertTicketQuery");
 
-// Create route to '/login'
+// Create route to '/createTicket'
 createTicket.post("/createTicket", (req, res, next) => {
+  console.log("works");
   // Assign request values to the variables
   const { userID, title, description, dateOfCreation, status } = req.body;
 

@@ -364,6 +364,8 @@ const mapDispatchToProps = dispatch => {
         type: RESET_STATE
       });
 
+      event.preventDefault();
+
       createTicketApi.createTicket(
         dispatch,
         _userID,

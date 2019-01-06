@@ -10,6 +10,7 @@ const createTicket = (
   status,
   history
 ) => {
+  console.log("works");
   axios
     .post("/createTicket", {
       userID,
@@ -19,8 +20,8 @@ const createTicket = (
       status
     })
     .then(result => {
-      // Redirect user to dashboard page after success
-      return history.push("/dashboard");
+      // Refresh page on success
+      return window.location.reload();
     })
     .catch(error => {
       return dispatch({
