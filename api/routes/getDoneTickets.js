@@ -24,7 +24,7 @@ getDoneTickets.post("/getTickets/done", (req, res, next) => {
       MySQLConnection.query(getDoneTicketsQuery, (err, result) => {
         // Error handling
         if (err) res.status(500).json({ message: err });
-        else res.status(201).json({ ticket: result });
+        else res.status(201).json({ tickets: result });
       });
     }
   });

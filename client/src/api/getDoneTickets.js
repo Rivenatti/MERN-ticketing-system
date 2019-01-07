@@ -5,9 +5,12 @@ async function getDoneTickets(dispatch) {
   await axios
     .post(`/getTickets/done`)
     .then(result => {
+      let tickets = result.data.tickets.map(ticket => {
+        return Object.assign({}, ticket, { dialogOpen: false });
+      });
       return dispatch({
         type: GET_DONE_TICKETS,
-        tickets: result.data.ticket
+        tickets
       });
     })
     .catch(error => {

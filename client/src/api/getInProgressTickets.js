@@ -5,9 +5,12 @@ async function getInProgressTickets(dispatch) {
   await axios
     .post(`/getTickets/inProgress`)
     .then(result => {
+      let tickets = result.data.tickets.map(ticket => {
+        return Object.assign({}, ticket, { dialogOpen: false });
+      });
       return dispatch({
         type: GET_IN_PROGRESS_TICKETS,
-        tickets: result.data.ticket
+        tickets
       });
     })
     .catch(error => {

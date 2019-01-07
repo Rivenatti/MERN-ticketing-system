@@ -1,15 +1,15 @@
 // Require express router
-const getNewTickets = require("express").Router();
+const getAllTickets = require("express").Router();
 
 // Require MySQL connection
 const MySQLConnection = require("../../config/MySQL");
 
 // Import MySQL queries
 const checkIfTicketsTableExistsQuery = require("../MySQL_queries/ticket/checkIfTicketsTableExistsQuery");
-const getNewTicketsQuery = require("../MySQL_queries/ticket/getNewTicketsQuery");
+const getAllTicketsQuery = require("../MySQL_queries/ticket/getAllTicketsQuery");
 
-// Create route to '/getTickets/new'
-getNewTickets.post("/getTickets/new", (req, res, next) => {
+// Create route to '/getTickets/all'
+getAllTickets.post("/getTickets/all", (req, res, next) => {
   // Check if tickets table exists in the database
   MySQLConnection.query(checkIfTicketsTableExistsQuery, (err, result) => {
     // Error handling
@@ -21,7 +21,7 @@ getNewTickets.post("/getTickets/new", (req, res, next) => {
         .json({ message: "Tickets table doesn't exist in the database." });
     } else {
       // Get ticket data from the db
-      MySQLConnection.query(getNewTicketsQuery, (err, result) => {
+      MySQLConnection.query(getAllTicketsQuery, (err, result) => {
         // Error handling
         if (err) res.status(500).json({ message: err });
         else res.status(201).json({ tickets: result });
@@ -30,4 +30,4 @@ getNewTickets.post("/getTickets/new", (req, res, next) => {
   });
 });
 
-module.exports = getNewTickets;
+module.exports = getAllTickets;

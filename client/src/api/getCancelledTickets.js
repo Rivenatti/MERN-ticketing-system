@@ -5,9 +5,12 @@ async function getCancelledTickets(dispatch) {
   await axios
     .post(`/getTickets/cancelled`)
     .then(result => {
+      let tickets = result.data.tickets.map(ticket => {
+        return Object.assign({}, ticket, { dialogOpen: false });
+      });
       return dispatch({
         type: GET_CANCELLED_TICKETS,
-        tickets: result.data.ticket
+        tickets
       });
     })
     .catch(error => {

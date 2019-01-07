@@ -1,12 +1,7 @@
 // React
 import React, { Component } from "react";
-// import { Link } from "react-router-dom";
-import getUserTicketsApi from "../../api/getUserTickets";
-import getNewTicketsApi from "../../api/getNewTickets";
-import getInProgressTicketsApi from "../../api/getInProgressTickets";
-import getDoneTicketsApi from "../../api/getDoneTickets";
-import getCancelledTicketsApi from "../../api/getCancelledTickets";
-import deleteTicketApi from "../../api/deleteTicket";
+import PropTypes from "prop-types";
+import getAllTicketsApi from "../../api/getAllTickets";
 
 // Redux
 import { connect } from "react-redux";
@@ -36,6 +31,18 @@ import BuildIcon from "@material-ui/icons/Build";
 import DoneIcon from "@material-ui/icons/CheckCircle";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { withStyles } from "@material-ui/core/styles";
+
+function TabContainer(props) {
+  return (
+    <Typography component="div" style={{ padding: 8 * 3 }}>
+      {props.children}
+    </Typography>
+  );
+}
+
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired
+};
 
 // Material UI custom styles
 const styles = {
@@ -103,14 +110,14 @@ class AdminDashboard extends Component {
     activeTab: 0
   };
 
-  // On mounting reset previous state
   componentWillMount = () => {
+    // On reset previous state
     this.props.onMountResetState();
   };
 
-  // Get user tickets array
   componentDidMount = () => {
-    this.props.newTickets.length === 0 && this.props.getNewTickets();
+    // Get all tickets array
+    this.props.allTickets.length === 0 && this.props.getAllTickets();
   };
 
   // Active tab change
@@ -133,6 +140,105 @@ class AdminDashboard extends Component {
   render() {
     const { classes } = this.props;
     const { activeTab, expanded } = this.state;
+    console.log(this.props);
+
+    const renderPanel = ticket => {
+      return (
+        <div key={ticket.ticketID}>
+          <ExpansionPanel
+            expanded={expanded === ticket.ticketID}
+            onChange={this.handleChange(ticket.ticketID)}
+            className={classes.expansionBar}
+          >
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography className={classes.heading}>Me</Typography>
+              <Typography className={classes.secondaryHeading}>
+                {ticket.title}
+              </Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails className={classes.expansionPanelDetails}>
+              <Divider />
+              <Typography className={classes.ticketDate}>
+                Date:{" "}
+                {ticket.dateOfCreation
+                  .split("T")[0]
+                  .split("-")
+                  .reverse()
+                  .join("-")}
+              </Typography>
+              <Typography className={classes.ticketStatus}>
+                Status: {ticket.status}
+              </Typography>
+
+              <Typography className={classes.ticketStatus}>
+                Description:
+              </Typography>
+              <Typography variant="body1" className={classes.ticketBody}>
+                {ticket.description}
+              </Typography>
+            </ExpansionPanelDetails>
+            <Divider />
+            <ExpansionPanelActions className={classes.expansionPanelActions}>
+              <Button
+                size="small"
+                color="primary"
+                onClick={() =>
+                  this.props.history.push(`/edit/${ticket.ticketID}`)
+                }
+              >
+                Edit
+              </Button>
+
+              <Button
+                size="small"
+                onClick={() => this.props.handleDialogOpen(ticket.ticketID)}
+              >
+                <Dialog
+                  open={ticket.dialogOpen}
+                  onClose={() => this.props.handleDialogOpen(ticket.ticketID)}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  {/* Dialog title */}
+
+                  <DialogTitle id="alert-dialog-title">
+                    {"Are you sure you want to cancell this ticket?"}
+                  </DialogTitle>
+                  <DialogActions>
+                    {/* Agree button */}
+
+                    <Button
+                      onClick={() =>
+                        this.props.cancellTicket(
+                          ticket.ticketID,
+                          this.props.history
+                        )
+                      }
+                      color="primary"
+                      autoFocus
+                    >
+                      Agree
+                    </Button>
+
+                    {/* Disagree button */}
+
+                    <Button
+                      onClick={() =>
+                        this.props.handleDialogOpen(ticket.ticketID)
+                      }
+                      color="primary"
+                    >
+                      Disagree
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+                Cancell
+              </Button>
+            </ExpansionPanelActions>
+          </ExpansionPanel>
+        </div>
+      );
+    };
 
     return (
       <>
@@ -144,7 +250,8 @@ class AdminDashboard extends Component {
             indicatorColor="primary"
             textColor="primary"
             centered={true}
-            scrollable={false}
+            variant="scrollable"
+            scrollButtons="off"
           >
             <Tab label="New" icon={<AnnoucementIcon />} />
             <Tab label="In progress" icon={<BuildIcon />} />
@@ -152,472 +259,42 @@ class AdminDashboard extends Component {
             <Tab label="Cancelled" icon={<CancelIcon />} />
           </Tabs>
         </AppBar>
+
+        {/* NEW TICKETS TAB */}
         {activeTab === 0 && (
-          <div>
-            {this.props.newTickets.map(ticket => {
-              return (
-                <div key={ticket.ticketID}>
-                  <ExpansionPanel
-                    expanded={expanded === ticket.ticketID}
-                    onChange={this.handleChange(ticket.ticketID)}
-                    className={classes.expansionBar}
-                  >
-                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                      <Typography className={classes.heading}>Me</Typography>
-                      <Typography className={classes.secondaryHeading}>
-                        {ticket.title}
-                      </Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails
-                      className={classes.expansionPanelDetails}
-                    >
-                      <Divider />
-                      <Typography className={classes.ticketDate}>
-                        Date:{" "}
-                        {ticket.dateOfCreation
-                          .split("T")[0]
-                          .split("-")
-                          .reverse()
-                          .join("-")}
-                      </Typography>
-                      <Typography className={classes.ticketStatus}>
-                        Status: {ticket.status}
-                      </Typography>
-
-                      <Typography className={classes.ticketStatus}>
-                        Description:
-                      </Typography>
-                      <Typography
-                        variant="body1"
-                        className={classes.ticketBody}
-                      >
-                        {ticket.description}
-                      </Typography>
-                    </ExpansionPanelDetails>
-                    <Divider />
-                    <ExpansionPanelActions
-                      className={classes.expansionPanelActions}
-                    >
-                      <Button
-                        size="small"
-                        color="primary"
-                        onClick={() =>
-                          this.props.history.push(`/edit/${ticket.ticketID}`)
-                        }
-                      >
-                        Edit
-                      </Button>
-
-                      <Button
-                        size="small"
-                        onClick={() =>
-                          this.props.handleDialogOpen(ticket.ticketID)
-                        }
-                      >
-                        <Dialog
-                          open={ticket.dialogOpen}
-                          onClose={() =>
-                            this.props.handleDialogOpen(ticket.ticketID)
-                          }
-                          aria-labelledby="alert-dialog-title"
-                          aria-describedby="alert-dialog-description"
-                        >
-                          {/* Dialog title */}
-
-                          <DialogTitle id="alert-dialog-title">
-                            {"Are you sure you want to delete this ticket?"}
-                          </DialogTitle>
-                          <DialogActions>
-                            {/* Agree button */}
-
-                            <Button
-                              onClick={() =>
-                                this.props.deleteTicket(
-                                  ticket.ticketID,
-                                  this.props.history
-                                )
-                              }
-                              color="primary"
-                              autoFocus
-                            >
-                              Agree
-                            </Button>
-
-                            {/* Disagree button */}
-
-                            <Button
-                              onClick={() =>
-                                this.props.handleDialogOpen(ticket.ticketID)
-                              }
-                              color="primary"
-                            >
-                              Disagree
-                            </Button>
-                          </DialogActions>
-                        </Dialog>
-                        Delete
-                      </Button>
-                    </ExpansionPanelActions>
-                  </ExpansionPanel>
-                </div>
-              );
-            })}
-          </div>
+          <TabContainer>
+            {this.props.allTickets.map(
+              ticket => ticket.status === "new" && renderPanel(ticket)
+            )}
+          </TabContainer>
         )}
 
-        {
-          (activeTab === 1 &&
-            this.props.inProgressTickets.length === 0 &&
-            this.props.getInProgressTickets(),
-          (
-            <div>
-              {this.props.inProgressTickets.map(ticket => {
-                return (
-                  <div key={ticket.ticketID}>
-                    <ExpansionPanel
-                      expanded={expanded === ticket.ticketID}
-                      onChange={this.handleChange(ticket.ticketID)}
-                      className={classes.expansionBar}
-                    >
-                      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography className={classes.heading}>Me</Typography>
-                        <Typography className={classes.secondaryHeading}>
-                          {ticket.title}
-                        </Typography>
-                      </ExpansionPanelSummary>
-                      <ExpansionPanelDetails
-                        className={classes.expansionPanelDetails}
-                      >
-                        <Divider />
-                        <Typography className={classes.ticketDate}>
-                          Date:{" "}
-                          {ticket.dateOfCreation
-                            .split("T")[0]
-                            .split("-")
-                            .reverse()
-                            .join("-")}
-                        </Typography>
-                        <Typography className={classes.ticketStatus}>
-                          Status: {ticket.status}
-                        </Typography>
+        {/* IN PROGRESS TICKETS TAB */}
+        {activeTab === 1 && (
+          <TabContainer>
+            {this.props.allTickets.map(
+              ticket => ticket.status === "inProgress" && renderPanel(ticket)
+            )}
+          </TabContainer>
+        )}
 
-                        <Typography className={classes.ticketStatus}>
-                          Description:
-                        </Typography>
-                        <Typography
-                          variant="body1"
-                          className={classes.ticketBody}
-                        >
-                          {ticket.description}
-                        </Typography>
-                      </ExpansionPanelDetails>
-                      <Divider />
-                      <ExpansionPanelActions
-                        className={classes.expansionPanelActions}
-                      >
-                        <Button
-                          size="small"
-                          color="primary"
-                          onClick={() =>
-                            this.props.history.push(`/edit/${ticket.ticketID}`)
-                          }
-                        >
-                          Edit
-                        </Button>
+        {/* DONE TICKETS TAB */}
+        {activeTab === 2 && (
+          <TabContainer>
+            {this.props.allTickets.map(
+              ticket => ticket.status === "done" && renderPanel(ticket)
+            )}
+          </TabContainer>
+        )}
 
-                        <Button
-                          size="small"
-                          onClick={() =>
-                            this.props.handleDialogOpen(ticket.ticketID)
-                          }
-                        >
-                          <Dialog
-                            open={ticket.dialogOpen}
-                            onClose={() =>
-                              this.props.handleDialogOpen(ticket.ticketID)
-                            }
-                            aria-labelledby="alert-dialog-title"
-                            aria-describedby="alert-dialog-description"
-                          >
-                            {/* Dialog title */}
-
-                            <DialogTitle id="alert-dialog-title">
-                              {"Are you sure you want to delete this ticket?"}
-                            </DialogTitle>
-                            <DialogActions>
-                              {/* Agree button */}
-
-                              <Button
-                                onClick={() =>
-                                  this.props.deleteTicket(
-                                    ticket.ticketID,
-                                    this.props.history
-                                  )
-                                }
-                                color="primary"
-                                autoFocus
-                              >
-                                Agree
-                              </Button>
-
-                              {/* Disagree button */}
-
-                              <Button
-                                onClick={() =>
-                                  this.props.handleDialogOpen(ticket.ticketID)
-                                }
-                                color="primary"
-                              >
-                                Disagree
-                              </Button>
-                            </DialogActions>
-                          </Dialog>
-                          Delete
-                        </Button>
-                      </ExpansionPanelActions>
-                    </ExpansionPanel>
-                  </div>
-                );
-              })}
-            </div>
-          ))
-        }
-
-        {
-          (activeTab === 2 &&
-            this.props.doneTickets.length === 0 &&
-            this.props.getDoneTickets(),
-          (
-            <div>
-              {this.props.doneTickets.map(ticket => {
-                return (
-                  <div key={ticket.ticketID}>
-                    <ExpansionPanel
-                      expanded={expanded === ticket.ticketID}
-                      onChange={this.handleChange(ticket.ticketID)}
-                      className={classes.expansionBar}
-                    >
-                      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography className={classes.heading}>Me</Typography>
-                        <Typography className={classes.secondaryHeading}>
-                          {ticket.title}
-                        </Typography>
-                      </ExpansionPanelSummary>
-                      <ExpansionPanelDetails
-                        className={classes.expansionPanelDetails}
-                      >
-                        <Divider />
-                        <Typography className={classes.ticketDate}>
-                          Date:{" "}
-                          {ticket.dateOfCreation
-                            .split("T")[0]
-                            .split("-")
-                            .reverse()
-                            .join("-")}
-                        </Typography>
-                        <Typography className={classes.ticketStatus}>
-                          Status: {ticket.status}
-                        </Typography>
-
-                        <Typography className={classes.ticketStatus}>
-                          Description:
-                        </Typography>
-                        <Typography
-                          variant="body1"
-                          className={classes.ticketBody}
-                        >
-                          {ticket.description}
-                        </Typography>
-                      </ExpansionPanelDetails>
-                      <Divider />
-                      <ExpansionPanelActions
-                        className={classes.expansionPanelActions}
-                      >
-                        <Button
-                          size="small"
-                          color="primary"
-                          onClick={() =>
-                            this.props.history.push(`/edit/${ticket.ticketID}`)
-                          }
-                        >
-                          Edit
-                        </Button>
-
-                        <Button
-                          size="small"
-                          onClick={() =>
-                            this.props.handleDialogOpen(ticket.ticketID)
-                          }
-                        >
-                          <Dialog
-                            open={ticket.dialogOpen}
-                            onClose={() =>
-                              this.props.handleDialogOpen(ticket.ticketID)
-                            }
-                            aria-labelledby="alert-dialog-title"
-                            aria-describedby="alert-dialog-description"
-                          >
-                            {/* Dialog title */}
-
-                            <DialogTitle id="alert-dialog-title">
-                              {"Are you sure you want to delete this ticket?"}
-                            </DialogTitle>
-                            <DialogActions>
-                              {/* Agree button */}
-
-                              <Button
-                                onClick={() =>
-                                  this.props.deleteTicket(
-                                    ticket.ticketID,
-                                    this.props.history
-                                  )
-                                }
-                                color="primary"
-                                autoFocus
-                              >
-                                Agree
-                              </Button>
-
-                              {/* Disagree button */}
-
-                              <Button
-                                onClick={() =>
-                                  this.props.handleDialogOpen(ticket.ticketID)
-                                }
-                                color="primary"
-                              >
-                                Disagree
-                              </Button>
-                            </DialogActions>
-                          </Dialog>
-                          Delete
-                        </Button>
-                      </ExpansionPanelActions>
-                    </ExpansionPanel>
-                  </div>
-                );
-              })}
-            </div>
-          ))
-        }
-
-        {
-          (activeTab === 3 &&
-            this.props.cancelledTickets.length === 0 &&
-            this.props.getCancelledTickets(),
-          (
-            <div>
-              {this.props.cancelledTickets.map(ticket => {
-                return (
-                  <div key={ticket.ticketID}>
-                    <ExpansionPanel
-                      expanded={expanded === ticket.ticketID}
-                      onChange={this.handleChange(ticket.ticketID)}
-                      className={classes.expansionBar}
-                    >
-                      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography className={classes.heading}>Me</Typography>
-                        <Typography className={classes.secondaryHeading}>
-                          {ticket.title}
-                        </Typography>
-                      </ExpansionPanelSummary>
-                      <ExpansionPanelDetails
-                        className={classes.expansionPanelDetails}
-                      >
-                        <Divider />
-                        <Typography className={classes.ticketDate}>
-                          Date:{" "}
-                          {ticket.dateOfCreation
-                            .split("T")[0]
-                            .split("-")
-                            .reverse()
-                            .join("-")}
-                        </Typography>
-                        <Typography className={classes.ticketStatus}>
-                          Status: {ticket.status}
-                        </Typography>
-
-                        <Typography className={classes.ticketStatus}>
-                          Description:
-                        </Typography>
-                        <Typography
-                          variant="body1"
-                          className={classes.ticketBody}
-                        >
-                          {ticket.description}
-                        </Typography>
-                      </ExpansionPanelDetails>
-                      <Divider />
-                      <ExpansionPanelActions
-                        className={classes.expansionPanelActions}
-                      >
-                        <Button
-                          size="small"
-                          color="primary"
-                          onClick={() =>
-                            this.props.history.push(`/edit/${ticket.ticketID}`)
-                          }
-                        >
-                          Edit
-                        </Button>
-
-                        <Button
-                          size="small"
-                          onClick={() =>
-                            this.props.handleDialogOpen(ticket.ticketID)
-                          }
-                        >
-                          <Dialog
-                            open={ticket.dialogOpen}
-                            onClose={() =>
-                              this.props.handleDialogOpen(ticket.ticketID)
-                            }
-                            aria-labelledby="alert-dialog-title"
-                            aria-describedby="alert-dialog-description"
-                          >
-                            {/* Dialog title */}
-
-                            <DialogTitle id="alert-dialog-title">
-                              {"Are you sure you want to delete this ticket?"}
-                            </DialogTitle>
-                            <DialogActions>
-                              {/* Agree button */}
-
-                              <Button
-                                onClick={() =>
-                                  this.props.deleteTicket(
-                                    ticket.ticketID,
-                                    this.props.history
-                                  )
-                                }
-                                color="primary"
-                                autoFocus
-                              >
-                                Agree
-                              </Button>
-
-                              {/* Disagree button */}
-
-                              <Button
-                                onClick={() =>
-                                  this.props.handleDialogOpen(ticket.ticketID)
-                                }
-                                color="primary"
-                              >
-                                Disagree
-                              </Button>
-                            </DialogActions>
-                          </Dialog>
-                          Delete
-                        </Button>
-                      </ExpansionPanelActions>
-                    </ExpansionPanel>
-                  </div>
-                );
-              })}
-            </div>
-          ))
-        }
+        {/* CANCELLED TICKETS TAB */}
+        {activeTab === 3 && (
+          <TabContainer>
+            {this.props.allTickets.map(
+              ticket => ticket.status === "cancelled" && renderPanel(ticket)
+            )}
+          </TabContainer>
+        )}
       </>
     );
   }
@@ -625,10 +302,7 @@ class AdminDashboard extends Component {
 
 const mapStateToProps = state => {
   return {
-    newTickets: state.ticketReducer.newTickets,
-    inProgressTickets: state.ticketReducer.inProgressTickets,
-    doneTickets: state.ticketReducer.doneTickets,
-    cancelledTickets: state.ticketReducer.cancelledTickets
+    allTickets: state.ticketReducer.allTickets
   };
 };
 
@@ -636,34 +310,18 @@ const mapDispatchToProps = dispatch => {
   return {
     onMountResetState: () => dispatch({ type: RESET_STATE }),
 
-    getTickets: userID => {
-      return getUserTicketsApi.getUserTickets(dispatch, userID);
-    },
-
-    getNewTickets: () => {
-      return getNewTicketsApi.getNewTickets(dispatch);
-    },
-
-    getInProgressTickets: () => {
-      return getInProgressTicketsApi.getInProgressTickets(dispatch);
-    },
-
-    getDoneTickets: () => {
-      return getDoneTicketsApi.getDoneTickets(dispatch);
-    },
-
-    getCancelledTickets: () => {
-      return getCancelledTicketsApi.getCancelledTickets(dispatch);
-    },
-
     handleDialogOpen: ticketID => {
       return dispatch({ type: TICKET_DIALOG_OPEN, ticketID });
     },
 
-    deleteTicket: (ticketID, history) => {
-      return deleteTicketApi.deleteTicket(dispatch, ticketID, history);
+    getAllTickets: () => {
+      return getAllTicketsApi.getAllTickets(dispatch);
     }
   };
+};
+
+AdminDashboard.propTypes = {
+  classes: PropTypes.object.isRequired
 };
 
 export default connect(

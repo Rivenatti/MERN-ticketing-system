@@ -1,15 +1,15 @@
 import axios from "axios";
-import { HANDLE_ERROR, GET_NEW_TICKETS } from "../actions/actions";
+import { HANDLE_ERROR, GET_ALL_TICKETS } from "../actions/actions";
 
-async function getNewTickets(dispatch) {
+async function getAllTickets(dispatch) {
   await axios
-    .post(`/getTickets/new`)
+    .post(`/getTickets/all`)
     .then(result => {
       let tickets = result.data.tickets.map(ticket => {
         return Object.assign({}, ticket, { dialogOpen: false });
       });
       return dispatch({
-        type: GET_NEW_TICKETS,
+        type: GET_ALL_TICKETS,
         tickets
       });
     })
@@ -21,4 +21,4 @@ async function getNewTickets(dispatch) {
     });
 }
 
-export default { getNewTickets };
+export default { getAllTickets };

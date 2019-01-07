@@ -24,7 +24,7 @@ getInProgressTickets.post("/getTickets/inProgress", (req, res, next) => {
       MySQLConnection.query(getInProgressTicketsQuery, (err, result) => {
         // Error handling
         if (err) res.status(500).json({ message: err });
-        else res.status(201).json({ ticket: result });
+        else res.status(201).json({ tickets: result });
       });
     }
   });

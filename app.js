@@ -55,6 +55,10 @@ app.use("/", createTicketRoute);
 const getUserTicketsRoute = require("./api/routes/getUserTickets");
 app.use("/", getUserTicketsRoute);
 
+// Get all tickets route
+const getAllTicketsRoute = require("./api/routes/getAllTickets");
+app.use("/", getAllTicketsRoute);
+
 // Get ticket route
 const getTicketRoute = require("./api/routes/getTicket");
 app.use("/", getTicketRoute);
@@ -82,6 +86,10 @@ app.use("/", userTicketEdit);
 // Delete ticket route
 const userTicketDelete = require("./api/routes/deleteTicket");
 app.use("/", userTicketDelete);
+
+// Cancell ticket route
+const ticketCancelledRoute = require("./api/routes/ticketCancelled");
+app.use("/", ticketCancelledRoute);
 
 //----- Error handling routes
 app.use((req, res, next) => {

@@ -51,15 +51,27 @@ class Home extends Component {
             style={{ marginTop: 20, textAlign: "center" }}
           >
             {this.props.token ? (
-              <Link to="/dashboard" className={classes.link}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className={classes.button}
-                >
-                  Dashboard
-                </Button>
-              </Link>
+              this.props.role === "user" ? (
+                <Link to="/dashboard" className={classes.link}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                  >
+                    Dashboard
+                  </Button>
+                </Link>
+              ) : (
+                <Link to="/admin-dashboard" className={classes.link}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                  >
+                    Admin dashboard
+                  </Button>
+                </Link>
+              )
             ) : (
               <Link to="/login" className={classes.link}>
                 <Button
