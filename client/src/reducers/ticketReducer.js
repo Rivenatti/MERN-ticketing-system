@@ -5,7 +5,7 @@ import {
   GET_ALL_TICKETS,
   GET_USER_TICKETS,
   RESET_STATE,
-  TICKET_DIALOG_OPEN
+  ADMIN_TICKET_DIALOG_OPEN
 } from "../actions/actions";
 
 // Initial state
@@ -70,16 +70,16 @@ const ticketReducer = (state = INITIAL_STATE, action) => {
       return Object.assign({}, state, { allTickets: action.tickets });
     }
 
-    case TICKET_DIALOG_OPEN: {
+    case ADMIN_TICKET_DIALOG_OPEN: {
       let { allTickets } = state;
-      let changedTicket = allTickets.map(ticket => {
-        return Object.assign({}, ticket, { dialogOpen: !ticket.dialogOpen });
+      let newTicketArray = allTickets.map(ticket => {
+        return ticket.ticketID === action.ticketID
+          ? Object.assign({}, ticket, { dialogOpen: !ticket.dialogOpen })
+          : ticket;
       });
 
-      console.log(changedTicket);
-
       return Object.assign({}, state, {
-        allTickets: changedTicket
+        allTickets: newTicketArray
       });
     }
 

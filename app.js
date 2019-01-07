@@ -88,8 +88,8 @@ const userTicketDelete = require("./api/routes/deleteTicket");
 app.use("/", userTicketDelete);
 
 // Cancell ticket route
-const ticketCancelledRoute = require("./api/routes/ticketCancelled");
-app.use("/", ticketCancelledRoute);
+const ticketStatusChangedRoute = require("./api/routes/changeTicketStatus");
+app.use("/", ticketStatusChangedRoute);
 
 //----- Error handling routes
 app.use((req, res, next) => {

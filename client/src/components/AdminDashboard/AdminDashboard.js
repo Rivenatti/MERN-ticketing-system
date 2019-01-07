@@ -2,12 +2,13 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import getAllTicketsApi from "../../api/getAllTickets";
+import changeTicketStatusApi from "../../api/changeTicketStatus";
 
 // Redux
 import { connect } from "react-redux";
 
 // Actions
-import { RESET_STATE, TICKET_DIALOG_OPEN } from "../../actions/actions";
+import { RESET_STATE, ADMIN_TICKET_DIALOG_OPEN } from "../../actions/actions";
 
 // Material-UI
 import {
@@ -144,20 +145,30 @@ class AdminDashboard extends Component {
 
     const renderPanel = ticket => {
       return (
+        // UNIQUE KEY
         <div key={ticket.ticketID}>
+          {/* TICKET PANEL */}
           <ExpansionPanel
             expanded={expanded === ticket.ticketID}
             onChange={this.handleChange(ticket.ticketID)}
             className={classes.expansionBar}
           >
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography className={classes.heading}>Me</Typography>
+              {/* TICKET CREATOR */}
+              <Typography className={classes.heading}>Creator</Typography>
+
+              {/* TICKET TITLE */}
               <Typography className={classes.secondaryHeading}>
                 {ticket.title}
               </Typography>
             </ExpansionPanelSummary>
+
+            {/* TICKET EXPANDED DETAILS */}
             <ExpansionPanelDetails className={classes.expansionPanelDetails}>
+              {/* HORIZONTAL DIVIDER */}
               <Divider />
+
+              {/* DATE OF CREATION/EDITION 'dd-mm-yyyy' */}
               <Typography className={classes.ticketDate}>
                 Date:{" "}
                 {ticket.dateOfCreation
@@ -166,10 +177,13 @@ class AdminDashboard extends Component {
                   .reverse()
                   .join("-")}
               </Typography>
+
+              {/* STATUS */}
               <Typography className={classes.ticketStatus}>
                 Status: {ticket.status}
               </Typography>
 
+              {/* DESCRIPTION */}
               <Typography className={classes.ticketStatus}>
                 Description:
               </Typography>
@@ -177,7 +191,11 @@ class AdminDashboard extends Component {
                 {ticket.description}
               </Typography>
             </ExpansionPanelDetails>
+
+            {/* HORIZONTAL DIVIDER */}
             <Divider />
+
+            {/* EDIT BUTTON */}
             <ExpansionPanelActions className={classes.expansionPanelActions}>
               <Button
                 size="small"
@@ -189,51 +207,43 @@ class AdminDashboard extends Component {
                 Edit
               </Button>
 
-              <Button
-                size="small"
-                onClick={() => this.props.handleDialogOpen(ticket.ticketID)}
-              >
-                <Dialog
-                  open={ticket.dialogOpen}
-                  onClose={() => this.props.handleDialogOpen(ticket.ticketID)}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
+              {/* IF TICKET HAS NOT BEEN CANCELLED, DISPLAY CANCELL BUTTON */}
+              {ticket.status !== "cancelled" && (
+                <Button
+                  size="small"
+                  onClick={() => this.props.handleDialogOpen(ticket.ticketID)}
                 >
-                  {/* Dialog title */}
+                  {/* BUTTON NAME VALUE */}
+                  Cancell
+                  {/* DIALOG ON BUTTON CLICK  */}
+                  <Dialog
+                    open={ticket.dialogOpen}
+                    onClose={() => this.props.handleDialogOpen(ticket.ticketID)}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    {/* Dialog title */}
+                    <DialogTitle id="alert-dialog-title">
+                      {"Are you sure you want to cancell this ticket?"}
+                    </DialogTitle>
+                    <DialogActions>
+                      {/* Agree button */}
+                      <Button
+                        onClick={() =>
+                          this.props.cancellTicket(ticket.ticketID)
+                        }
+                        color="primary"
+                        autoFocus
+                      >
+                        Agree
+                      </Button>
 
-                  <DialogTitle id="alert-dialog-title">
-                    {"Are you sure you want to cancell this ticket?"}
-                  </DialogTitle>
-                  <DialogActions>
-                    {/* Agree button */}
-
-                    <Button
-                      onClick={() =>
-                        this.props.cancellTicket(
-                          ticket.ticketID,
-                          this.props.history
-                        )
-                      }
-                      color="primary"
-                      autoFocus
-                    >
-                      Agree
-                    </Button>
-
-                    {/* Disagree button */}
-
-                    <Button
-                      onClick={() =>
-                        this.props.handleDialogOpen(ticket.ticketID)
-                      }
-                      color="primary"
-                    >
-                      Disagree
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-                Cancell
-              </Button>
+                      {/* Disagree button */}
+                      <Button color="primary">Disagree</Button>
+                    </DialogActions>
+                  </Dialog>
+                </Button>
+              )}
             </ExpansionPanelActions>
           </ExpansionPanel>
         </div>
@@ -311,11 +321,19 @@ const mapDispatchToProps = dispatch => {
     onMountResetState: () => dispatch({ type: RESET_STATE }),
 
     handleDialogOpen: ticketID => {
-      return dispatch({ type: TICKET_DIALOG_OPEN, ticketID });
+      return dispatch({ type: ADMIN_TICKET_DIALOG_OPEN, ticketID });
     },
 
     getAllTickets: () => {
       return getAllTicketsApi.getAllTickets(dispatch);
+    },
+
+    cancellTicket: ticketID => {
+      return changeTicketStatusApi.changeTicketStatus(
+        dispatch,
+        ticketID,
+        "cancelled"
+      );
     }
   };
 };

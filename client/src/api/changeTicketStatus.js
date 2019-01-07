@@ -1,9 +1,11 @@
 import axios from "axios";
 import { HANDLE_ERROR } from "../actions/actions";
 
-const cancellTicket = (dispatch, ticketID, history) => {
+const changeTicketStatus = (dispatch, ticketID, status) => {
   axios
-    .post(`/cancell/${ticketID}`)
+    .post(`/changeStatus/${ticketID}`, {
+      status
+    })
     .then(result => {
       // Refresh page on success
       return window.location.reload();
@@ -16,4 +18,4 @@ const cancellTicket = (dispatch, ticketID, history) => {
     });
 };
 
-export default { cancellTicket };
+export default { changeTicketStatus };
