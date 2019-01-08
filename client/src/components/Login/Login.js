@@ -65,11 +65,13 @@ const styles = {
 
 class Login extends Component {
   componentWillMount = () => {
-    // Reset previous inputs state
-    this.props.onMountResetState();
-
     // If user is logged in, redirect to home
     if (this.props.token) this.props.history.push("/");
+  };
+
+  componentWillUnmount = () => {
+    // On unmounting reset state
+    this.props.resetState();
   };
 
   render() {
@@ -249,7 +251,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onMountResetState: () => dispatch({ type: RESET_STATE }),
+    resetState: () => dispatch({ type: RESET_STATE }),
     inputFocused: e => dispatch({ type: INPUT_FOCUSED, name: e.target.name }),
     inputBlur: e => dispatch({ type: INPUT_BLUR, name: e.target.name }),
 

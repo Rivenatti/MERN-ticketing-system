@@ -29,7 +29,6 @@ const styles = {
 class Home extends Component {
   render() {
     const { classes } = this.props;
-    console.log(this.props);
     return (
       <Grid container className={classes.container}>
         <Grid item xs={1} sm={3} />

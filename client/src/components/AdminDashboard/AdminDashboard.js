@@ -1,11 +1,13 @@
 // React
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import getAllTicketsApi from "../../api/getAllTickets";
-import changeTicketStatusApi from "../../api/changeTicketStatus";
 
 // Redux
 import { connect } from "react-redux";
+
+// API
+import getAllTicketsApi from "../../api/getAllTickets";
+import changeTicketStatusApi from "../../api/changeTicketStatus";
 
 // Actions
 import { RESET_STATE, ADMIN_TICKET_DIALOG_OPEN } from "../../actions/actions";
@@ -33,6 +35,7 @@ import DoneIcon from "@material-ui/icons/CheckCircle";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { withStyles } from "@material-ui/core/styles";
 
+// Expansion tab container
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 8 * 3 }}>
@@ -111,14 +114,14 @@ class AdminDashboard extends Component {
     activeTab: 0
   };
 
-  componentWillMount = () => {
-    // On reset previous state
-    this.props.onMountResetState();
-  };
-
   componentDidMount = () => {
     // Get all tickets array
     this.props.allTickets.length === 0 && this.props.getAllTickets();
+  };
+
+  componentWillUnmount = () => {
+    // On unmounting reset state
+    this.props.resetState();
   };
 
   // Active tab change
@@ -154,7 +157,7 @@ class AdminDashboard extends Component {
             className={classes.expansionBar}
           >
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              {/* TICKET CREATOR */}
+              {/* TICKET CREATOR NAME */}
               <Typography className={classes.heading}>Creator</Typography>
 
               {/* TICKET TITLE */}
@@ -180,7 +183,8 @@ class AdminDashboard extends Component {
 
               {/* STATUS */}
               <Typography className={classes.ticketStatus}>
-                Status: {ticket.status}
+                Status:{" "}
+                {ticket.status === "inProgress" ? "in progress" : ticket.status}
               </Typography>
 
               {/* DESCRIPTION */}
@@ -204,7 +208,7 @@ class AdminDashboard extends Component {
                   this.props.history.push(`/edit/${ticket.ticketID}`)
                 }
               >
-                Edit
+                status
               </Button>
 
               {/* IF TICKET HAS NOT BEEN CANCELLED, DISPLAY CANCELL BUTTON */}
@@ -252,7 +256,7 @@ class AdminDashboard extends Component {
 
     return (
       <>
-        {/* ---------- "MY TICKETS" TAB ---------- */}
+        {/* ---------- APP BAR, TABS ---------- */}
         <AppBar position="static" color="default">
           <Tabs
             value={activeTab}
@@ -318,7 +322,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onMountResetState: () => dispatch({ type: RESET_STATE }),
+    resetState: () => dispatch({ type: RESET_STATE }),
 
     handleDialogOpen: ticketID => {
       return dispatch({ type: ADMIN_TICKET_DIALOG_OPEN, ticketID });
@@ -337,7 +341,6 @@ const mapDispatchToProps = dispatch => {
     }
   };
 };
-
 AdminDashboard.propTypes = {
   classes: PropTypes.object.isRequired
 };

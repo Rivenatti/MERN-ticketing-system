@@ -53,7 +53,6 @@ class SignOut extends Component {
     clearInterval(this.intervalId);
   }
   render() {
-    console.log(this.state);
     const { classes } = this.props;
     return (
       <Grid container className={classes.container}>

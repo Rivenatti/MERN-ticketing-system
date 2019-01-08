@@ -1,12 +1,14 @@
 // React
 import React, { Component } from "react";
-// import { Link } from "react-router-dom";
-import createTicketApi from "../../api/createTicket";
-import getUserTicketsApi from "../../api/getUserTickets";
-import deleteTicketApi from "../../api/deleteTicket";
+import PropTypes from "prop-types";
 
 // Redux
 import { connect } from "react-redux";
+
+// API
+import createTicketApi from "../../api/createTicket";
+import getUserTicketsApi from "../../api/getUserTickets";
+import deleteTicketApi from "../../api/deleteTicket";
 
 // Actions
 import {
@@ -38,6 +40,19 @@ import AnnoucementIcon from "@material-ui/icons/Announcement";
 import AddIcon from "@material-ui/icons/AddCircle";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { withStyles } from "@material-ui/core/styles";
+
+// Expansion tab container
+function TabContainer(props) {
+  return (
+    <Typography component="div" style={{ padding: 8 * 3 }}>
+      {props.children}
+    </Typography>
+  );
+}
+
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired
+};
 
 // Material UI custom styles
 const styles = {
@@ -105,15 +120,15 @@ class UserDashboard extends Component {
     activeTab: 0
   };
 
-  // On mounting reset previous state
-  componentWillMount = () => {
-    this.props.onMountResetState();
-  };
-
-  // Get user tickets array
   componentDidMount = () => {
+    // Get user tickets array
     this.props.userTickets.length === 0 &&
       this.props.getTickets(this.props.userID);
+  };
+
+  componentWillUnmount = () => {
+    // On unmounting reset state
+    this.props.resetState();
   };
 
   // Active tab change
@@ -141,7 +156,7 @@ class UserDashboard extends Component {
 
     return (
       <>
-        {/* ---------- "MY TICKETS" TAB ---------- */}
+        {/* ---------- APP BAR, TABS ---------- */}
         <AppBar position="static" color="default">
           <Tabs
             value={activeTab}
@@ -149,14 +164,17 @@ class UserDashboard extends Component {
             indicatorColor="primary"
             textColor="primary"
             centered={true}
-            scrollable={false}
+            variant="scrollable"
+            scrollButtons="off"
           >
             <Tab label="My tickets" icon={<AnnoucementIcon />} />
             <Tab label="New ticket" icon={<AddIcon />} />
           </Tabs>
         </AppBar>
+
+        {/* "MY TICKETS" TAB  */}
         {activeTab === 0 && (
-          <div>
+          <TabContainer>
             {this.props.userTickets.map(ticket => {
               return (
                 <div key={ticket.ticketID}>
@@ -184,7 +202,10 @@ class UserDashboard extends Component {
                           .join("-")}
                       </Typography>
                       <Typography className={classes.ticketStatus}>
-                        Status: {ticket.status}
+                        Status:{" "}
+                        {ticket.status === "inProgress"
+                          ? "in progress"
+                          : ticket.status}
                       </Typography>
 
                       <Typography className={classes.ticketStatus}>
@@ -248,14 +269,7 @@ class UserDashboard extends Component {
 
                             {/* Disagree button */}
 
-                            <Button
-                              onClick={() =>
-                                this.props.handleDialogOpen(ticket.ticketID)
-                              }
-                              color="primary"
-                            >
-                              Disagree
-                            </Button>
+                            <Button color="primary">Disagree</Button>
                           </DialogActions>
                         </Dialog>
                         Delete
@@ -265,11 +279,12 @@ class UserDashboard extends Component {
                 </div>
               );
             })}
-          </div>
+          </TabContainer>
         )}
 
+        {/* CREATE NEW TICKET TAB */}
         {activeTab === 1 && (
-          <>
+          <TabContainer>
             <Grid container>
               <Grid item xs={1} sm={3} md={4} />
               <Grid item xs={10} sm={6} md={4}>
@@ -332,7 +347,7 @@ class UserDashboard extends Component {
               </Grid>
             </Grid>
             <Grid item xs={1} sm={3} md={4} />
-          </>
+          </TabContainer>
         )}
       </>
     );
@@ -341,17 +356,20 @@ class UserDashboard extends Component {
 
 const mapStateToProps = state => {
   return {
+    // VARIABLES FOR NEW TICKET SUBMISSION
     ticketTitle: state.ticketReducer.title,
     ticketDescription: state.ticketReducer.description,
     ticketCreationDate: state.ticketReducer.created,
     userID: state.loggerReducer.userID,
+
+    // ARRAY OF USER TICKETS
     userTickets: state.ticketReducer.userTickets
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onMountResetState: () => dispatch({ type: RESET_STATE }),
+    resetState: () => dispatch({ type: RESET_STATE }),
 
     onInputChange: event => {
       dispatch({
@@ -361,6 +379,7 @@ const mapDispatchToProps = dispatch => {
       });
     },
 
+    // NEW TICKET SUBMISSION
     handleSubmit: (
       event,
       _userID,
