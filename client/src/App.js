@@ -18,6 +18,7 @@ import UserDashboard from "./components/UserDashboard/UserDashboard";
 import UserTicketEdit from "./components/UserDashboard/UserTicketEdit/UserTicketEdit";
 import AdminDashboard from "./components/AdminDashboard/AdminDashboard";
 import Logout from "./components/Logout/Logout";
+import Ticket from "./components/Ticket/AdminTicket/AdminTicket";
 
 class App extends Component {
   render() {
@@ -55,6 +56,7 @@ class App extends Component {
               <PrivateRoute exact path="/dashboard" component={UserDashboard} />
               <PrivateRoute exact path="/edit/:id" component={UserTicketEdit} />
               <PrivateRoute exact path="/logout" component={Logout} />
+              <PrivateRoute exact path="/adminTicket" component={Ticket} />
             </Switch>
           </div>
           <Footer />
