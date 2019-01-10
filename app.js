@@ -63,6 +63,10 @@ app.use("/", getAllTicketsRoute);
 const getTicketRoute = require("./api/routes/getTicket");
 app.use("/", getTicketRoute);
 
+// Get user route
+const getUserRoute = require("./api/routes/getUserDetails");
+app.use("/", getUserRoute);
+
 // Get new tickets route
 const getNewTicketsRoute = require("./api/routes/getNewTickets");
 app.use("/", getNewTicketsRoute);

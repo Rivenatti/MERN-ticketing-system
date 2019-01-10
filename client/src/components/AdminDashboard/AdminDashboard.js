@@ -205,7 +205,7 @@ class AdminDashboard extends Component {
                 size="small"
                 color="primary"
                 onClick={() =>
-                  this.props.history.push(`/edit/${ticket.ticketID}`)
+                  this.props.history.push(`/adminTicket/${ticket.ticketID}`)
                 }
               >
                 status

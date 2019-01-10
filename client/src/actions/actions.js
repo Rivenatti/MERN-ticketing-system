@@ -16,6 +16,9 @@ export const SNACKBAR_CLOSE = "SNACKBAR_CLOSE";
 export const LOGGED_IN = "LOGGED_IN";
 export const LOGGED_OUT = "LOGGED_OUT";
 
+// User
+export const GET_USER = "GET_USER";
+
 // Tickets
 export const TICKET_INPUT_CHANGED = "TICKET_INPUT_CHANGED";
 export const GET_TICKET = "GET_TICKET";

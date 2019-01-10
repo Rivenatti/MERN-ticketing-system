@@ -2,6 +2,7 @@
 import {
   TICKET_INPUT_CHANGED,
   GET_TICKET,
+  GET_USER,
   GET_ALL_TICKETS,
   GET_USER_TICKETS,
   RESET_STATE,
@@ -16,6 +17,12 @@ const INITIAL_STATE = {
   // Ticket id
   id: null,
 
+  // Ticket creator id
+  userID: "",
+
+  // Ticket creator name
+  userName: "",
+
   // Ticket title
   title: "",
 
@@ -24,6 +31,9 @@ const INITIAL_STATE = {
 
   // Date of creation
   created: new Date(),
+
+  // Ticket status
+  status: "",
 
   // Array of user tickets to display on the dashboard
   userTickets: [],
@@ -57,9 +67,17 @@ const ticketReducer = (state = INITIAL_STATE, action) => {
     case GET_TICKET: {
       return Object.assign({}, state, {
         id: action.ticket[0].ticketID,
+        userID: action.ticket[0].userID,
         title: action.ticket[0].title,
         description: action.ticket[0].description,
-        created: action.ticket[0].dateOfCreation
+        created: action.ticket[0].dateOfCreation,
+        status: action.ticket[0].status
+      });
+    }
+
+    case GET_USER: {
+      return Object.assign({}, state, {
+        userName: `${action.user[0].firstName} ${action.user[0].lastName}`
       });
     }
 

@@ -9,22 +9,8 @@ import { connect } from "react-redux";
 // Actions
 import { RESET_STATE, TICKET_INPUT_CHANGED } from "../../../actions/actions";
 
-// Api
-import getUserApi from "../../../api/getUser";
-
 // Material-UI
-import {
-  Grid,
-  Typography,
-  Paper,
-  Button,
-  TextField,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions
-} from "@material-ui/core";
+import { Grid, Typography, Paper, Button, TextField } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 
 // Material UI custom styles
@@ -58,35 +44,16 @@ const styles = {
   returnButton: {
     width: "50%",
     margin: "20px auto 0px auto"
-  },
-
-  menu: {
-    width: 200
   }
 };
 
-class AdminTicket extends Component {
+class UserTicket extends Component {
   componentDidMount = () => {
     this.props.getTicket(this.props.match.params.id);
   };
 
-  state = {
-    open: false
-  };
-
-  handleClickOpen = () => {
-    this.setState({ open: true });
-  };
-
-  handleClose = () => {
-    this.setState({ open: false });
-  };
-
   render() {
     const { classes } = this.props;
-    console.log(this.props);
-    if (this.props.ticketUserID !== "")
-      this.props.getUser(this.props.ticketUserID);
     return (
       <>
         <Grid container>
@@ -101,87 +68,16 @@ class AdminTicket extends Component {
                 </Typography>
 
                 {/* CREATOR */}
-                <Typography variant="h6">
-                  Creator: {this.props.ticketUserName}
-                </Typography>
-
-                {/* TITLE */}
-                <Typography variant="h6">
-                  Title: {this.props.ticketTitle}
-                </Typography>
+                <Typography variant="h6">Creator: </Typography>
 
                 {/* DATE */}
-                <Typography variant="h6">
-                  Date:{" "}
-                  {this.props.ticketCreationDate
-                    .toString()
-                    .split("T")[0]
-                    .split("-")
-                    .reverse()
-                    .join("-")}
-                </Typography>
+                <Typography variant="h6">Date: </Typography>
 
                 {/* DESCRIPTION */}
-                <Typography variant="h6">
-                  Description: {this.props.ticketDescription}
-                </Typography>
+                <Typography variant="h6">Description: </Typography>
 
                 {/* STATUS */}
-                <Typography variant="h6">
-                  Status: {this.props.ticketStatus}
-                </Typography>
-
-                {/* CHANGE STATUS BUTTON */}
-                <div>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={this.handleClickOpen}
-                  >
-                    Update status
-                  </Button>
-                  <Dialog
-                    open={this.state.open}
-                    onClose={this.handleClose}
-                    aria-labelledby="form-dialog-title"
-                  >
-                    <DialogTitle
-                      id="form-dialog-title"
-                      style={{ textAlign: "center" }}
-                    >
-                      Status
-                    </DialogTitle>
-                    <DialogContent>
-                      <DialogContentText>
-                        Select current ticket status.
-                      </DialogContentText>
-                      <TextField
-                        id="outlined-select-currency-native"
-                        select
-                        margin="normal"
-                        variant="outlined"
-                        SelectProps={{
-                          native: true,
-                          MenuProps: {
-                            className: classes.menu
-                          }
-                        }}
-                        fullWidth
-                      >
-                        <option>in progress</option>
-                        <option>done</option>
-                      </TextField>
-                    </DialogContent>
-                    <DialogActions>
-                      <Button onClick={this.handleClose} color="primary">
-                        Update
-                      </Button>
-                      <Button onClick={this.handleClose} color="primary">
-                        Cancel
-                      </Button>
-                    </DialogActions>
-                  </Dialog>
-                </div>
+                <Typography variant="h6">Status: </Typography>
 
                 {/* MESSAGES SECTION*/}
                 <Typography variant="h5" style={{ textAlign: "center" }}>
@@ -242,12 +138,9 @@ class AdminTicket extends Component {
 const mapStateToProps = state => {
   return {
     ticketID: state.ticketReducer.id,
-    ticketUserID: state.ticketReducer.userID,
-    ticketUserName: state.ticketReducer.userName,
     ticketTitle: state.ticketReducer.title,
     ticketDescription: state.ticketReducer.description,
-    ticketCreationDate: state.ticketReducer.created,
-    ticketStatus: state.ticketReducer.status
+    ticketCreationDate: state.ticketReducer.created
   };
 };
 
@@ -263,10 +156,6 @@ const mapDispatchToProps = dispatch => {
 
     getTicket: ticketID => {
       getTicketApi.getTicket(dispatch, ticketID);
-    },
-
-    getUser: userID => {
-      getUserApi.getUser(dispatch, userID);
     },
 
     handleSubmit: (
@@ -298,4 +187,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(AdminTicket));
+)(withStyles(styles)(UserTicket));
