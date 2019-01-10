@@ -19,6 +19,7 @@ import UserTicketEdit from "./components/UserDashboard/UserTicketEdit/UserTicket
 import AdminDashboard from "./components/AdminDashboard/AdminDashboard";
 import Logout from "./components/Logout/Logout";
 import Ticket from "./components/Ticket/AdminTicket/AdminTicket";
+import NotFound from "./components/NotFound/NotFound";
 
 class App extends Component {
   render() {
@@ -47,6 +48,7 @@ class App extends Component {
               <Route exact path="/" component={Home} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
+              <Route component={NotFound} />
               <PrivateRoute
                 exact
                 path="/admin-dashboard"

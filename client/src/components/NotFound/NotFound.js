@@ -1,49 +1,73 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
-import "./NotFound.scss";
+
+// Material-UI
+import { Grid, Typography, CircularProgress } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+
+const styles = {
+  container: {
+    marginTop: "25vh"
+  },
+
+  heading: {
+    marginTop: 20,
+    textAlign: "center"
+  },
+
+  content: {
+    marginTop: 20,
+    padding: 10,
+    textAlign: "center",
+    display: "flex",
+    justifyContent: "center",
+    flexFlow: "column",
+    alignItems: "center"
+  },
+
+  button: {
+    marginTop: 20
+  }
+};
 
 class NotFound extends Component {
-  //------------ SET TIME HERE ------------
   state = {
-    counter: 3
+    currentCount: 3
   };
 
-  componentDidMount = () => {
-    const intervalId = setInterval(this.countdown, 1000);
-    this.setState({ intervalId });
-  };
+  timer() {
+    this.setState({
+      currentCount: this.state.currentCount - 1
+    });
 
-  countdown = () => this.setState({ counter: this.state.counter - 1 });
-
-  componentWillUnmount = () => {
-    clearInterval(this.state.intervalId);
-  };
-
+    if (this.state.currentCount < 1) {
+      clearInterval(this.intervalId);
+      this.props.history.push("/");
+    }
+  }
+  componentDidMount() {
+    this.intervalId = setInterval(this.timer.bind(this), 1000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
+  }
   render() {
-    const { location } = this.props;
-    const { counter } = this.state;
+    const { classes } = this.props;
     return (
-      <div className="NotFound">
-        <div className="container">
-          <p>
-            Page
-            <br />
-            <code>
-              {location.pathname}
-              <br /> not found.
-              <br />
-              <br />
-            </code>
-            Redirecting to homepage in {counter} seconds
-          </p>
-          <div className="dot dot1" />
-          <div className="dot dot2" />
-          <div className="dot dot3" />
-          {counter === 0 && <Redirect to="/" />}
-        </div>
-      </div>
+      <Grid container className={classes.container}>
+        <Grid item xs={1} sm={3} />
+        <Grid item xs={10} sm={6} className={classes.content}>
+          <Typography variant="h2" className={classes.heading}>
+            Error 404: Page not found.
+          </Typography>
+          <Typography variant="subtitle1" style={{ marginTop: 20 }}>
+            Redirecting to homepage...
+          </Typography>
+          <CircularProgress disableShrink style={{ marginTop: 20 }} />
+        </Grid>
+        <Grid item xs={1} sm={3} />
+      </Grid>
     );
   }
 }
 
-export default NotFound;
+export default withStyles(styles)(NotFound);

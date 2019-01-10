@@ -129,7 +129,11 @@ class AdminTicket extends Component {
                         className: classes.menu
                       }
                     }}
-                    helperText={`Current status: ${this.props.ticketStatus}`}
+                    helperText={`Current status: ${
+                      this.props.ticketStatus === "inProgress"
+                        ? "in progress"
+                        : this.props.ticketStatus
+                    }`}
                     margin="normal"
                     variant="outlined"
                     onChange={event =>
@@ -189,6 +193,7 @@ class AdminTicket extends Component {
                   variant="contained"
                   color="secondary"
                   className={classes.returnButton}
+                  onClick={() => this.props.history.push(`/admin-dashboard`)}
                 >
                   RETURN TO DASHBOARD
                 </Button>
@@ -236,7 +241,7 @@ const mapDispatchToProps = dispatch => {
       changeTicketStatusApi.changeTicketStatus(
         dispatch,
         _ticketID,
-        event.target.value
+        event.target.value === "in progress" ? "inProgress" : event.target.value
       );
     }
   };

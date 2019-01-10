@@ -157,8 +157,10 @@ class AdminDashboard extends Component {
             className={classes.expansionBar}
           >
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              {/* TICKET CREATOR NAME */}
-              <Typography className={classes.heading}>Creator</Typography>
+              {/* TICKET ID */}
+              <Typography className={classes.heading}>
+                #{ticket.ticketID}
+              </Typography>
 
               {/* TICKET TITLE */}
               <Typography className={classes.secondaryHeading}>
@@ -171,9 +173,15 @@ class AdminDashboard extends Component {
               {/* HORIZONTAL DIVIDER */}
               <Divider />
 
+              {/* STATUS */}
+              <Typography className={classes.ticketStatus}>
+                <span style={{ color: "#00ad0e" }}>Status: </span>
+                {ticket.status === "inProgress" ? "in progress" : ticket.status}
+              </Typography>
+
               {/* DATE OF CREATION/EDITION 'dd-mm-yyyy' */}
               <Typography className={classes.ticketDate}>
-                Date:{" "}
+                <span style={{ color: "blue" }}>Date: </span>
                 {ticket.dateOfCreation
                   .split("T")[0]
                   .split("-")
@@ -181,17 +189,9 @@ class AdminDashboard extends Component {
                   .join("-")}
               </Typography>
 
-              {/* STATUS */}
-              <Typography className={classes.ticketStatus}>
-                Status:{" "}
-                {ticket.status === "inProgress" ? "in progress" : ticket.status}
-              </Typography>
-
               {/* DESCRIPTION */}
               <Typography className={classes.ticketStatus}>
-                Description:
-              </Typography>
-              <Typography variant="body1" className={classes.ticketBody}>
+                <span style={{ color: "blue" }}> Description: </span>{" "}
                 {ticket.description}
               </Typography>
             </ExpansionPanelDetails>
@@ -278,7 +278,9 @@ class AdminDashboard extends Component {
         {activeTab === 0 && (
           <TabContainer>
             {this.props.allTickets.map(
-              ticket => ticket.status === "new" && renderPanel(ticket)
+              ticket =>
+                (ticket.status === "new" || ticket.status === "edited") &&
+                renderPanel(ticket)
             )}
           </TabContainer>
         )}

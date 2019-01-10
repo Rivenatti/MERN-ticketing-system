@@ -89,6 +89,18 @@ class Navbar extends Component {
                   <Link to="/profile" className={classes.link}>
                     <MenuItem onClick={this.handleClose}>Profile</MenuItem>
                   </Link>
+
+                  {/* DASHBOARD LINK */}
+                  {this.props.role === "admin" ? (
+                    <Link to="/admin-dashboard" className={classes.link}>
+                      <MenuItem onClick={this.handleClose}>Dashboard</MenuItem>
+                    </Link>
+                  ) : (
+                    <Link to="/dashboard" className={classes.link}>
+                      <MenuItem onClick={this.handleClose}>Dashboard</MenuItem>
+                    </Link>
+                  )}
+
                   {/* SIGN OUT LINK */}
                   <Link
                     to="/logout"
@@ -109,7 +121,8 @@ class Navbar extends Component {
 
 const mapStateToProps = state => {
   return {
-    token: state.loggerReducer.token
+    token: state.loggerReducer.token,
+    role: state.loggerReducer.role
   };
 };
 
