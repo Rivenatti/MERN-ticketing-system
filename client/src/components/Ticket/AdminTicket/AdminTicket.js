@@ -1,30 +1,19 @@
 // React
 import React, { Component } from "react";
 import getTicketApi from "../../../api/getTicket";
-import editTicketApi from "../../../api/editTicket";
+import changeTicketStatusApi from "../../../api/changeTicketStatus";
 
 // Redux
 import { connect } from "react-redux";
 
 // Actions
-import { RESET_STATE, TICKET_INPUT_CHANGED } from "../../../actions/actions";
+import { TICKET_INPUT_CHANGED } from "../../../actions/actions";
 
 // Api
 import getUserApi from "../../../api/getUser";
 
 // Material-UI
-import {
-  Grid,
-  Typography,
-  Paper,
-  Button,
-  TextField,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions
-} from "@material-ui/core";
+import { Grid, Typography, Paper, Button, TextField } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 
 // Material UI custom styles
@@ -67,9 +56,11 @@ const styles = {
 
 class AdminTicket extends Component {
   componentDidMount = () => {
+    // Get ticket info
     this.props.getTicket(this.props.match.params.id);
   };
 
+  // Update ticket status state and handlers
   state = {
     open: false
   };
@@ -128,60 +119,32 @@ class AdminTicket extends Component {
 
                 {/* STATUS */}
                 <Typography variant="h6">
-                  Status: {this.props.ticketStatus}
+                  <TextField
+                    id="outlined-select-currency-native"
+                    select
+                    label="Update status"
+                    SelectProps={{
+                      native: true,
+                      MenuProps: {
+                        className: classes.menu
+                      }
+                    }}
+                    helperText={`Current status: ${this.props.ticketStatus}`}
+                    margin="normal"
+                    variant="outlined"
+                    onChange={event =>
+                      this.props.handleTicketStatusChange(
+                        event,
+                        this.props.ticketID
+                      )
+                    }
+                  >
+                    <option />
+                    <option>in progress</option>
+                    <option>done</option>
+                    <option>cancelled</option>
+                  </TextField>
                 </Typography>
-
-                {/* CHANGE STATUS BUTTON */}
-                <div>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={this.handleClickOpen}
-                  >
-                    Update status
-                  </Button>
-                  <Dialog
-                    open={this.state.open}
-                    onClose={this.handleClose}
-                    aria-labelledby="form-dialog-title"
-                  >
-                    <DialogTitle
-                      id="form-dialog-title"
-                      style={{ textAlign: "center" }}
-                    >
-                      Status
-                    </DialogTitle>
-                    <DialogContent>
-                      <DialogContentText>
-                        Select current ticket status.
-                      </DialogContentText>
-                      <TextField
-                        id="outlined-select-currency-native"
-                        select
-                        margin="normal"
-                        variant="outlined"
-                        SelectProps={{
-                          native: true,
-                          MenuProps: {
-                            className: classes.menu
-                          }
-                        }}
-                        fullWidth
-                      >
-                        <option>in progress</option>
-                        <option>done</option>
-                      </TextField>
-                    </DialogContent>
-                    <DialogActions>
-                      <Button onClick={this.handleClose} color="primary">
-                        Update
-                      </Button>
-                      <Button onClick={this.handleClose} color="primary">
-                        Cancel
-                      </Button>
-                    </DialogActions>
-                  </Dialog>
-                </div>
 
                 {/* MESSAGES SECTION*/}
                 <Typography variant="h5" style={{ textAlign: "center" }}>
@@ -217,7 +180,7 @@ class AdminTicket extends Component {
                     color="primary"
                     className={classes.actionButton}
                   >
-                    ADD REPLY
+                    REPLY
                   </Button>
                 </div>
 
@@ -269,27 +232,11 @@ const mapDispatchToProps = dispatch => {
       getUserApi.getUser(dispatch, userID);
     },
 
-    handleSubmit: (
-      event,
-      _ticketID,
-      _title,
-      _description,
-      _dateOfCreation,
-      _status,
-      _history
-    ) => {
-      event.preventDefault();
-
-      dispatch({
-        type: RESET_STATE
-      });
-
-      editTicketApi.editTicket(
+    handleTicketStatusChange: (event, _ticketID) => {
+      changeTicketStatusApi.changeTicketStatus(
         dispatch,
         _ticketID,
-        _title,
-        _description,
-        _history
+        event.target.value
       );
     }
   };

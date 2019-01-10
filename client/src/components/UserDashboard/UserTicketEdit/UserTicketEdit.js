@@ -61,7 +61,7 @@ class UserTicketEdit extends Component {
                       this.props.ticketID,
                       this.props.ticketTitle,
                       this.props.ticketDescription,
-                      this.props.ticketCreationDate,
+
                       "edited",
                       this.props.history
                     )
@@ -139,7 +139,6 @@ const mapDispatchToProps = dispatch => {
       _ticketID,
       _title,
       _description,
-      _dateOfCreation,
       _status,
       _history
     ) => {
@@ -154,6 +153,7 @@ const mapDispatchToProps = dispatch => {
         _ticketID,
         _title,
         _description,
+        _status,
         _history
       );
     }

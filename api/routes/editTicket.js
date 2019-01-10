@@ -11,7 +11,7 @@ const editTicketQuery = require("../MySQL_queries/ticket/editTicketQuery");
 // Create route to '/edit/:id'
 userTicketEdit.post("/edit/:id", (req, res, next) => {
   // Assign request values to the variables
-  const { title, description } = req.body;
+  const { title, description, status } = req.body;
 
   // Check if tickets table exists in the database
   MySQLConnection.query(checkIfTicketsTableExistsQuery, (err, result) => {
@@ -30,7 +30,7 @@ userTicketEdit.post("/edit/:id", (req, res, next) => {
           title,
           description,
           new Date().toISOString(),
-          "edited"
+          status
         ),
         (err, result) => {
           // Error handling
