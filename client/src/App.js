@@ -14,11 +14,12 @@ import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import Footer from "./components/Footer/footer";
-import UserDashboard from "./components/UserDashboard/UserDashboard";
-import UserTicketEdit from "./components/UserDashboard/UserTicketEdit/UserTicketEdit";
-import AdminDashboard from "./components/AdminDashboard/AdminDashboard";
+import UserDashboard from "./components/Dashboard/UserDashboard/UserDashboard";
+import UserTicketEdit from "./components/Dashboard/UserDashboard/UserTicketEdit/UserTicketEdit";
+import AdminDashboard from "./components/Dashboard/AdminDashboard/AdminDashboard";
 import Logout from "./components/Logout/Logout";
-import Ticket from "./components/Ticket/AdminTicket/AdminTicket";
+import AdminTicket from "./components/Ticket/AdminTicket/AdminTicket";
+import UserTicket from "./components/Ticket/UserTicket/UserTicket";
 import NotFound from "./components/NotFound/NotFound";
 
 class App extends Component {
@@ -48,17 +49,26 @@ class App extends Component {
               <Route exact path="/" component={Home} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
-              <Route component={NotFound} />
               <PrivateRoute
                 exact
                 path="/admin-dashboard"
                 component={AdminDashboard}
               />
-              v
+
+              <PrivateRoute
+                exact
+                path="/admin-ticket/:id"
+                component={AdminTicket}
+              />
               <PrivateRoute exact path="/dashboard" component={UserDashboard} />
               <PrivateRoute exact path="/edit/:id" component={UserTicketEdit} />
+              <PrivateRoute
+                exact
+                path="/user-ticket/:id"
+                component={UserTicket}
+              />
               <PrivateRoute exact path="/logout" component={Logout} />
-              <PrivateRoute exact path="/adminTicket/:id" component={Ticket} />
+              <Route component={NotFound} />
             </Switch>
           </div>
           <Footer />

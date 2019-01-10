@@ -48,12 +48,25 @@ const styles = {
 };
 
 class UserTicket extends Component {
-  componentDidMount = () => {
+  componentWillMount = () => {
+    // Get ticket data
     this.props.getTicket(this.props.match.params.id);
+  };
+
+  componentDidUpdate = () => {
+    // When ticket data loaded, check compare IDs for authorization
+    this.props.userID !== this.props.ticketUserID &&
+      this.props.history.push("/");
+  };
+
+  componentWillUnmount = () => {
+    // On unmounting reset state
+    this.props.resetState();
   };
 
   render() {
     const { classes } = this.props;
+
     return (
       <>
         <Grid container>
@@ -67,17 +80,40 @@ class UserTicket extends Component {
                   Ticket
                 </Typography>
 
-                {/* CREATOR */}
-                <Typography variant="h6">Creator: </Typography>
+                {/* TICKET ID */}
+                <Typography variant="h6">
+                  <span style={{ color: "blue" }}>Ticket ID: </span>#
+                  {this.props.ticketID}
+                </Typography>
+
+                {/* TITLE */}
+                <Typography variant="h6">
+                  <span style={{ color: "blue" }}>Title: </span>
+                  {this.props.ticketTitle}
+                </Typography>
 
                 {/* DATE */}
-                <Typography variant="h6">Date: </Typography>
+                <Typography variant="h6">
+                  <span style={{ color: "blue" }}>Date: </span>
+                  {this.props.ticketCreationDate
+                    .toString()
+                    .split("T")[0]
+                    .split("-")
+                    .reverse()
+                    .join("-")}
+                </Typography>
 
                 {/* DESCRIPTION */}
-                <Typography variant="h6">Description: </Typography>
+                <Typography variant="h6">
+                  <span style={{ color: "blue" }}>Description: </span>
+                  {this.props.ticketDescription}
+                </Typography>
 
                 {/* STATUS */}
-                <Typography variant="h6">Status: </Typography>
+                <Typography variant="h6">
+                  <span style={{ color: "blue" }}>Status: </span>
+                  {this.props.ticketStatus}
+                </Typography>
 
                 {/* MESSAGES SECTION*/}
                 <Typography variant="h5" style={{ textAlign: "center" }}>
@@ -122,6 +158,7 @@ class UserTicket extends Component {
                   variant="contained"
                   color="secondary"
                   className={classes.returnButton}
+                  onClick={() => this.props.history.push(`/dashboard`)}
                 >
                   RETURN TO DASHBOARD
                 </Button>
@@ -137,15 +174,22 @@ class UserTicket extends Component {
 
 const mapStateToProps = state => {
   return {
+    // USER DATA
+    userID: state.loggerReducer.userID,
+
+    // TICKET DATA
     ticketID: state.ticketReducer.id,
+    ticketUserID: state.ticketReducer.userID,
     ticketTitle: state.ticketReducer.title,
     ticketDescription: state.ticketReducer.description,
-    ticketCreationDate: state.ticketReducer.created
+    ticketCreationDate: state.ticketReducer.created,
+    ticketStatus: state.ticketReducer.status
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
+    resetState: () => dispatch({ type: RESET_STATE }),
     onInputChange: event => {
       dispatch({
         type: TICKET_INPUT_CHANGED,

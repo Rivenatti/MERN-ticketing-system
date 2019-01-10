@@ -6,11 +6,14 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 // API
-import getAllTicketsApi from "../../api/getAllTickets";
-import changeTicketStatusApi from "../../api/changeTicketStatus";
+import getAllTicketsApi from "../../../api/getAllTickets";
+import changeTicketStatusApi from "../../../api/changeTicketStatus";
 
 // Actions
-import { RESET_STATE, ADMIN_TICKET_DIALOG_OPEN } from "../../actions/actions";
+import {
+  RESET_STATE,
+  ADMIN_TICKET_DIALOG_OPEN
+} from "../../../actions/actions";
 
 // Material-UI
 import {
@@ -109,9 +112,15 @@ const styles = {
 };
 
 class AdminDashboard extends Component {
+  // Expansion tabs state
   state = {
     expanded: null,
     activeTab: 0
+  };
+
+  componentWillMount = () => {
+    // Check if user is authorized
+    if (this.props.userRole !== "admin") this.props.history.push("/");
   };
 
   componentDidMount = () => {
@@ -144,7 +153,6 @@ class AdminDashboard extends Component {
   render() {
     const { classes } = this.props;
     const { activeTab, expanded } = this.state;
-    console.log(this.props);
 
     const renderPanel = ticket => {
       return (
@@ -205,7 +213,7 @@ class AdminDashboard extends Component {
                 size="small"
                 color="primary"
                 onClick={() =>
-                  this.props.history.push(`/adminTicket/${ticket.ticketID}`)
+                  this.props.history.push(`/admin-ticket/${ticket.ticketID}`)
                 }
               >
                 status
@@ -318,6 +326,10 @@ class AdminDashboard extends Component {
 
 const mapStateToProps = state => {
   return {
+    // USER ROLE
+    userRole: state.loggerReducer.role,
+
+    // ALL TICKETS FROM THE DB
     allTickets: state.ticketReducer.allTickets
   };
 };

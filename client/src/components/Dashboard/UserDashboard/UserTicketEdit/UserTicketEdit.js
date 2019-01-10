@@ -1,13 +1,13 @@
 // React
 import React, { Component } from "react";
-import getTicketApi from "../../../api/getTicket";
-import editTicketApi from "../../../api/editTicket";
+import getTicketApi from "../../../../api/getTicket";
+import editTicketApi from "../../../../api/editTicket";
 
 // Redux
 import { connect } from "react-redux";
 
 // Actions
-import { RESET_STATE, TICKET_INPUT_CHANGED } from "../../../actions/actions";
+import { RESET_STATE, TICKET_INPUT_CHANGED } from "../../../../actions/actions";
 
 // Material-UI
 import { Grid, Typography, Paper, TextField, Button } from "@material-ui/core";
@@ -36,8 +36,20 @@ const styles = {
 };
 
 class UserTicketEdit extends Component {
-  componentDidMount = () => {
+  componentWillMount = () => {
+    // Get ticket data
     this.props.getTicket(this.props.match.params.id);
+  };
+
+  componentDidUpdate = () => {
+    // When ticket data loaded, check compare IDs for authorization
+    this.props.userID !== this.props.ticketUserID &&
+      this.props.history.push("/");
+  };
+
+  componentWillUnmount = () => {
+    // On unmounting reset state
+    this.props.resetState();
   };
 
   render() {
@@ -113,7 +125,12 @@ class UserTicketEdit extends Component {
 
 const mapStateToProps = state => {
   return {
+    // USER DATA
+    userID: state.loggerReducer.userID,
+
+    // TICKET DATA
     ticketID: state.ticketReducer.id,
+    ticketUserID: state.ticketReducer.userID,
     ticketTitle: state.ticketReducer.title,
     ticketDescription: state.ticketReducer.description,
     ticketCreationDate: state.ticketReducer.created
@@ -122,6 +139,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    resetState: () => dispatch({ type: RESET_STATE }),
     onInputChange: event => {
       dispatch({
         type: TICKET_INPUT_CHANGED,

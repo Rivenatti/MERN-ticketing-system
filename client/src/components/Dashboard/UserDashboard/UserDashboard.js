@@ -6,16 +6,16 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 // API
-import createTicketApi from "../../api/createTicket";
-import getUserTicketsApi from "../../api/getUserTickets";
-import deleteTicketApi from "../../api/deleteTicket";
+import createTicketApi from "../../../api/createTicket";
+import getUserTicketsApi from "../../../api/getUserTickets";
+import deleteTicketApi from "../../../api/deleteTicket";
 
 // Actions
 import {
   RESET_STATE,
   TICKET_INPUT_CHANGED,
   TICKET_DIALOG_OPEN
-} from "../../actions/actions";
+} from "../../../actions/actions";
 
 // Material-UI
 import {
@@ -120,6 +120,11 @@ class UserDashboard extends Component {
     activeTab: 0
   };
 
+  componentWillMount = () => {
+    // Check if user is authorized
+    if (this.props.userRole !== "user") this.props.history.push("/");
+  };
+
   componentDidMount = () => {
     // Get user tickets array
     this.props.userTickets.length === 0 &&
@@ -152,8 +157,6 @@ class UserDashboard extends Component {
     const { classes } = this.props;
     const { activeTab, expanded } = this.state;
 
-    console.log(this.props);
-
     return (
       <>
         {/* ---------- APP BAR, TABS ---------- */}
@@ -177,51 +180,66 @@ class UserDashboard extends Component {
           <TabContainer>
             {this.props.userTickets.map(ticket => {
               return (
+                // UNIQUE KEY
                 <div key={ticket.ticketID}>
+                  {/* PANEL START */}
                   <ExpansionPanel
                     expanded={expanded === ticket.ticketID}
                     onChange={this.handleChange(ticket.ticketID)}
                     className={classes.expansionBar}
                   >
                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                      <Typography className={classes.heading}>Me</Typography>
+                      {/* TICKET ID */}
+                      <Typography className={classes.heading}>
+                        #{ticket.ticketID}
+                      </Typography>
+
+                      {/* TICKET TITLE */}
                       <Typography className={classes.secondaryHeading}>
                         {ticket.title}
                       </Typography>
                     </ExpansionPanelSummary>
+
+                    {/* PANEL DETAILS */}
                     <ExpansionPanelDetails
                       className={classes.expansionPanelDetails}
                     >
+                      {/* PANEL DIVIDER */}
                       <Divider />
+
+                      {/* STATUS */}
+                      <Typography className={classes.ticketStatus}>
+                        <span style={{ color: "#00ad0e" }}>Status: </span>
+                        {ticket.status === "inProgress"
+                          ? "in progress"
+                          : ticket.status}
+                      </Typography>
+
+                      {/* DATE OF CREATION/EDITION 'dd-mm-yyyy' */}
                       <Typography className={classes.ticketDate}>
-                        Date:{" "}
+                        <span style={{ color: "blue" }}>Date: </span>
                         {ticket.dateOfCreation
                           .split("T")[0]
                           .split("-")
                           .reverse()
                           .join("-")}
                       </Typography>
-                      <Typography className={classes.ticketStatus}>
-                        Status:{" "}
-                        {ticket.status === "inProgress"
-                          ? "in progress"
-                          : ticket.status}
-                      </Typography>
 
+                      {/* DESCRIPTION */}
                       <Typography className={classes.ticketStatus}>
-                        Description:
-                      </Typography>
-                      <Typography
-                        variant="body1"
-                        className={classes.ticketBody}
-                      >
+                        <span style={{ color: "blue" }}> Description: </span>{" "}
                         {ticket.description}
                       </Typography>
                     </ExpansionPanelDetails>
+
+                    {/* PANEL DIVIDER */}
                     <Divider />
+
+                    {/* PANEL BUTTONS */}
                     <ExpansionPanelActions
                       className={classes.expansionPanelActions}
                     >
+                      {/* EDIT BUTTON */}
                       <Button
                         size="small"
                         color="primary"
@@ -232,12 +250,27 @@ class UserDashboard extends Component {
                         Edit
                       </Button>
 
+                      {/* STATUS BUTTON */}
+                      <Button
+                        size="small"
+                        color="primary"
+                        onClick={() =>
+                          this.props.history.push(
+                            `/user-ticket/${ticket.ticketID}`
+                          )
+                        }
+                      >
+                        Status
+                      </Button>
+
+                      {/* DELETE TICKET DIALOG BUTTON */}
                       <Button
                         size="small"
                         onClick={() =>
                           this.props.handleDialogOpen(ticket.ticketID)
                         }
                       >
+                        {/* DIALOG */}
                         <Dialog
                           open={ticket.dialogOpen}
                           onClose={() =>
@@ -246,14 +279,14 @@ class UserDashboard extends Component {
                           aria-labelledby="alert-dialog-title"
                           aria-describedby="alert-dialog-description"
                         >
-                          {/* Dialog title */}
-
+                          {/* DIALOG TITLE */}
                           <DialogTitle id="alert-dialog-title">
                             {"Are you sure you want to delete this ticket?"}
                           </DialogTitle>
-                          <DialogActions>
-                            {/* Agree button */}
 
+                          {/* BUTTON ACTIONS */}
+                          <DialogActions>
+                            {/* AGREE BUTTON */}
                             <Button
                               onClick={() =>
                                 this.props.deleteTicket(
@@ -268,7 +301,6 @@ class UserDashboard extends Component {
                             </Button>
 
                             {/* Disagree button */}
-
                             <Button color="primary">Disagree</Button>
                           </DialogActions>
                         </Dialog>
@@ -356,6 +388,9 @@ class UserDashboard extends Component {
 
 const mapStateToProps = state => {
   return {
+    // USER ROLE
+    userRole: state.loggerReducer.role,
+
     // VARIABLES FOR NEW TICKET SUBMISSION
     ticketTitle: state.ticketReducer.title,
     ticketDescription: state.ticketReducer.description,

@@ -62,7 +62,7 @@ class SignOut extends Component {
             Logged out
           </Typography>
           <Typography variant="subtitle1" style={{ marginTop: 20 }}>
-            Redirecting to homepage
+            Redirecting to homepage...
           </Typography>
           <CircularProgress disableShrink style={{ marginTop: 20 }} />
         </Grid>

@@ -19,7 +19,7 @@ import { withStyles } from "@material-ui/core/styles";
 // Material UI custom styles
 const styles = {
   paper: {
-    margin: "17vh 0",
+    margin: "10vh 0",
     textAlign: "center"
   },
 
@@ -55,6 +55,11 @@ const styles = {
 };
 
 class AdminTicket extends Component {
+  componentWillMount = () => {
+    // Check if user is authorized
+    if (this.props.userRole !== "admin") this.props.history.push("/");
+  };
+
   componentDidMount = () => {
     // Get ticket info
     this.props.getTicket(this.props.match.params.id);
@@ -96,14 +101,21 @@ class AdminTicket extends Component {
                   Creator: {this.props.ticketUserName}
                 </Typography>
 
+                {/* TICKET ID */}
+                <Typography variant="h6">
+                  <span style={{ color: "blue" }}>Ticket ID: </span>#
+                  {this.props.ticketID}
+                </Typography>
+
                 {/* TITLE */}
                 <Typography variant="h6">
-                  Title: {this.props.ticketTitle}
+                  <span style={{ color: "blue" }}>Title: </span>
+                  {this.props.ticketTitle}
                 </Typography>
 
                 {/* DATE */}
                 <Typography variant="h6">
-                  Date:{" "}
+                  <span style={{ color: "blue" }}>Date: </span>
                   {this.props.ticketCreationDate
                     .toString()
                     .split("T")[0]
@@ -114,7 +126,8 @@ class AdminTicket extends Component {
 
                 {/* DESCRIPTION */}
                 <Typography variant="h6">
-                  Description: {this.props.ticketDescription}
+                  <span style={{ color: "blue" }}>Description: </span>
+                  {this.props.ticketDescription}
                 </Typography>
 
                 {/* STATUS */}
@@ -209,6 +222,10 @@ class AdminTicket extends Component {
 
 const mapStateToProps = state => {
   return {
+    // USER DATA
+    userRole: state.loggerReducer.userRole,
+
+    // TICKET DATA
     ticketID: state.ticketReducer.id,
     ticketUserID: state.ticketReducer.userID,
     ticketUserName: state.ticketReducer.userName,
