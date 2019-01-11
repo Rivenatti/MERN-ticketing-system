@@ -4,12 +4,15 @@ const getUser = require("express").Router();
 // Require MySQL connection
 const MySQLConnection = require("../../config/MySQL");
 
+// Require authentication middleware
+const checkAuth = require("../../middleware/checkAuth");
+
 // Import MySQL queries
 const checkIfUsersTableExistsQuery = require("../MySQL_queries/user/checkIfUsersTableExistsQuery");
 const getUserQuery = require("../MySQL_queries/user/getUserQuery");
 
 // Create route to '/getUser/:id'
-getUser.post("/getUser/:id", (req, res, next) => {
+getUser.post("/getUser/:id", checkAuth, (req, res, next) => {
   // Check if users table exists in the database
   MySQLConnection.query(checkIfUsersTableExistsQuery, (err, result) => {
     // Error handling

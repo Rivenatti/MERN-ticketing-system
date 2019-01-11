@@ -67,22 +67,6 @@ app.use("/", getTicketRoute);
 const getUserRoute = require("./api/routes/getUserDetails");
 app.use("/", getUserRoute);
 
-// Get new tickets route
-const getNewTicketsRoute = require("./api/routes/getNewTickets");
-app.use("/", getNewTicketsRoute);
-
-// Get in progress tickets route
-const getInProgressTickets = require("./api/routes/getInProgressTickets");
-app.use("/", getInProgressTickets);
-
-// Get done tickets route
-const getDoneTickets = require("./api/routes/getDoneTickets");
-app.use("/", getDoneTickets);
-
-// Get cancelled tickets route
-const getCancelledTickets = require("./api/routes/getCancelledTickets");
-app.use("/", getCancelledTickets);
-
 // Edit ticket route
 const userTicketEdit = require("./api/routes/editTicket");
 app.use("/", userTicketEdit);

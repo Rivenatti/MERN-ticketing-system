@@ -291,6 +291,7 @@ class UserDashboard extends Component {
                               onClick={() =>
                                 this.props.deleteTicket(
                                   ticket.ticketID,
+                                  this.props.userID,
                                   this.props.history
                                 )
                               }
@@ -449,8 +450,8 @@ const mapDispatchToProps = dispatch => {
       return dispatch({ type: TICKET_DIALOG_OPEN, ticketID });
     },
 
-    deleteTicket: (ticketID, history) => {
-      return deleteTicketApi.deleteTicket(dispatch, ticketID, history);
+    deleteTicket: (ticketID, userID, history) => {
+      return deleteTicketApi.deleteTicket(dispatch, userID, ticketID, history);
     }
   };
 };

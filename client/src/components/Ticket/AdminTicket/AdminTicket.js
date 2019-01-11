@@ -62,7 +62,7 @@ class AdminTicket extends Component {
 
   componentDidMount = () => {
     // Get ticket info
-    this.props.getTicket(this.props.match.params.id);
+    this.props.getTicket(this.props.userID, this.props.match.params.id);
   };
 
   // Update ticket status state and handlers
@@ -223,7 +223,8 @@ class AdminTicket extends Component {
 const mapStateToProps = state => {
   return {
     // USER DATA
-    userRole: state.loggerReducer.userRole,
+    userID: state.loggerReducer.userID,
+    userRole: state.loggerReducer.role,
 
     // TICKET DATA
     ticketID: state.ticketReducer.id,
@@ -246,8 +247,8 @@ const mapDispatchToProps = dispatch => {
       });
     },
 
-    getTicket: ticketID => {
-      getTicketApi.getTicket(dispatch, ticketID);
+    getTicket: (userID, ticketID) => {
+      getTicketApi.getTicket(dispatch, userID, ticketID);
     },
 
     getUser: userID => {

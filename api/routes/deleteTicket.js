@@ -4,12 +4,15 @@ const userTicketDelete = require("express").Router();
 // Require MySQL connection
 const MySQLConnection = require("../../config/MySQL");
 
+// Require authentication middleware
+const checkAuth = require("../../middleware/checkAuth");
+
 // Import MySQL queries
 const checkIfTicketsTableExistsQuery = require("../MySQL_queries/ticket/checkIfTicketsTableExistsQuery");
 const deleteTicketQuery = require("../MySQL_queries/ticket/deleteTicketQuery");
 
 // Create route to '/delete/:id'
-userTicketDelete.post("/delete/:id", (req, res, next) => {
+userTicketDelete.post("/delete/:id", checkAuth, (req, res, next) => {
   // Check if tickets table exists in the database
   MySQLConnection.query(checkIfTicketsTableExistsQuery, (err, result) => {
     // Error handling

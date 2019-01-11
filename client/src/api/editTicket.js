@@ -3,15 +3,16 @@ import { HANDLE_ERROR } from "../actions/actions";
 
 const editTicket = (
   dispatch,
+  userID,
   ticketID,
   title,
   description,
   status,
   history
 ) => {
-  console.log(history);
   axios
     .post(`/edit/${ticketID}`, {
+      userID,
       title,
       description,
       status

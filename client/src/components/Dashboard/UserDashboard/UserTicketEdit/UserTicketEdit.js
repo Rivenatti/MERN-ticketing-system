@@ -38,7 +38,7 @@ const styles = {
 class UserTicketEdit extends Component {
   componentWillMount = () => {
     // Get ticket data
-    this.props.getTicket(this.props.match.params.id);
+    this.props.getTicket(this.props.userID, this.props.match.params.id);
   };
 
   componentDidUpdate = () => {
@@ -70,6 +70,7 @@ class UserTicketEdit extends Component {
                   onSubmit={event =>
                     this.props.handleSubmit(
                       event,
+                      this.props.userID,
                       this.props.ticketID,
                       this.props.ticketTitle,
                       this.props.ticketDescription,
@@ -148,12 +149,13 @@ const mapDispatchToProps = dispatch => {
       });
     },
 
-    getTicket: ticketID => {
-      getTicketApi.getTicket(dispatch, ticketID);
+    getTicket: (userID, ticketID) => {
+      getTicketApi.getTicket(dispatch, userID, ticketID);
     },
 
     handleSubmit: (
       event,
+      _userID,
       _ticketID,
       _title,
       _description,
@@ -168,6 +170,7 @@ const mapDispatchToProps = dispatch => {
 
       editTicketApi.editTicket(
         dispatch,
+        _userID,
         _ticketID,
         _title,
         _description,

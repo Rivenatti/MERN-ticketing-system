@@ -20,7 +20,7 @@ const login = (dispatch, email, password, history) => {
       let expires = new Date();
       expires.setTime(expires.getTime() + 60 * 60 * 1000);
 
-      cookie.save("token", result.data.token, { expires });
+      cookie.save("token", result.data.token, { path: "/", expires });
 
       dispatch({ type: LOGGED_IN, token: result.data.token });
 

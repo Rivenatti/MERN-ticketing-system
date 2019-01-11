@@ -1,9 +1,9 @@
 import axios from "axios";
 import { HANDLE_ERROR } from "../actions/actions";
 
-const deleteTicket = (dispatch, ticketID, history) => {
+const deleteTicket = (dispatch, ticketID, userID, history) => {
   axios
-    .post(`/delete/${ticketID}`)
+    .post(`/delete/${ticketID}`, { userID })
     .then(result => {
       // Refresh page on success
       return window.location.reload();

@@ -1,9 +1,11 @@
 import axios from "axios";
 import { HANDLE_ERROR, GET_TICKET } from "../actions/actions";
 
-async function getTicket(dispatch, ticketID) {
+async function getTicket(dispatch, userID, ticketID) {
+  console.log(userID);
   await axios
     .post(`/get/${ticketID}`, {
+      userID,
       ticketID
     })
     .then(result => {

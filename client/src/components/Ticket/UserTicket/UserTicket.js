@@ -1,7 +1,6 @@
 // React
 import React, { Component } from "react";
 import getTicketApi from "../../../api/getTicket";
-import editTicketApi from "../../../api/editTicket";
 
 // Redux
 import { connect } from "react-redux";
@@ -16,7 +15,7 @@ import { withStyles } from "@material-ui/core/styles";
 // Material UI custom styles
 const styles = {
   paper: {
-    margin: "17vh 0",
+    margin: "10vh 0",
     textAlign: "center"
   },
 
@@ -50,7 +49,7 @@ const styles = {
 class UserTicket extends Component {
   componentWillMount = () => {
     // Get ticket data
-    this.props.getTicket(this.props.match.params.id);
+    this.props.getTicket(this.props.userID, this.props.match.params.id);
   };
 
   componentDidUpdate = () => {
@@ -198,32 +197,8 @@ const mapDispatchToProps = dispatch => {
       });
     },
 
-    getTicket: ticketID => {
-      getTicketApi.getTicket(dispatch, ticketID);
-    },
-
-    handleSubmit: (
-      event,
-      _ticketID,
-      _title,
-      _description,
-      _dateOfCreation,
-      _status,
-      _history
-    ) => {
-      event.preventDefault();
-
-      dispatch({
-        type: RESET_STATE
-      });
-
-      editTicketApi.editTicket(
-        dispatch,
-        _ticketID,
-        _title,
-        _description,
-        _history
-      );
+    getTicket: (userID, ticketID) => {
+      getTicketApi.getTicket(dispatch, userID, ticketID);
     }
   };
 };

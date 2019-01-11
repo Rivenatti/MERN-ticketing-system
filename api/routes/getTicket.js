@@ -4,12 +4,15 @@ const getTicket = require("express").Router();
 // Require MySQL connection
 const MySQLConnection = require("../../config/MySQL");
 
+// Require authentication middleware
+const checkAuth = require("../../middleware/checkAuth");
+
 // Import MySQL queries
 const checkIfTicketsTableExistsQuery = require("../MySQL_queries/ticket/checkIfTicketsTableExistsQuery");
 const getTicketQuery = require("../MySQL_queries/ticket/getTicketQuery");
 
 // Create route to '/get/:id'
-getTicket.post("/get/:id", (req, res, next) => {
+getTicket.post("/get/:id", checkAuth, (req, res, next) => {
   // Check if tickets table exists in the database
   MySQLConnection.query(checkIfTicketsTableExistsQuery, (err, result) => {
     // Error handling

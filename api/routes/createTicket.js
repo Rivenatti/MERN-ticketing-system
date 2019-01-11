@@ -4,12 +4,15 @@ const createTicket = require("express").Router();
 // Require MySQL connection
 const MySQLConnection = require("../../config/MySQL");
 
+// Require authentication middleware
+const checkAuth = require("../../middleware/checkAuth");
+
 // Import MySQL queries
 const checkIfTicketsTableExistsQuery = require("../MySQL_queries/ticket/checkIfTicketsTableExistsQuery");
 const insertTicketQuery = require("../MySQL_queries/ticket/insertTicketQuery");
 
 // Create route to '/createTicket'
-createTicket.post("/createTicket", (req, res, next) => {
+createTicket.post("/createTicket", checkAuth, (req, res, next) => {
   console.log("works");
   // Assign request values to the variables
   const { userID, title, description, dateOfCreation, status } = req.body;
