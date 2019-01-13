@@ -83,6 +83,14 @@ app.use("/", ticketStatusChangedRoute);
 const deleteUserRoute = require("./api/routes/deleteUser");
 app.use("/", deleteUserRoute);
 
+// Add new message route
+const addMessageRoute = require("./api/routes/addMessage");
+app.use("/", addMessageRoute);
+
+// Add get message route
+const getMessagesRoute = require("./api/routes/getMessages");
+app.use("/", getMessagesRoute);
+
 //----- Error handling routes
 app.use((req, res, next) => {
   const error = new Error("Error 404: Page not found.");

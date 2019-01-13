@@ -1,6 +1,8 @@
 // React
 import React, { Component } from "react";
 import getTicketApi from "../../../api/getTicket";
+import addNewMessageApi from "../../../api/addMessage";
+import getMessagesApi from "../../../api/getMessages";
 
 // Redux
 import { connect } from "react-redux";
@@ -66,6 +68,9 @@ class UserTicket extends Component {
   render() {
     const { classes } = this.props;
 
+    this.props.messages.length === 0 &&
+      this.props.getMessages(this.props.userID, this.props.match.params.id);
+
     return (
       <>
         <Grid container>
@@ -119,38 +124,75 @@ class UserTicket extends Component {
                   Messages
                 </Typography>
 
-                <Paper className={classes.replies}>
-                  <Typography variant="caption">John Smith</Typography>
-                  <Typography variant="body1" style={{ margin: "5px 0" }}>
-                    Reply 1
-                  </Typography>
-                  <div style={{ display: "flex", justifyContent: "right" }}>
-                    <Typography variant="caption">10-01-2019</Typography>
-                  </div>
-                </Paper>
+                {this.props.messages.length > 0
+                  ? this.props.messages.map(message => {
+                      return (
+                        <Paper className={classes.replies} key={message.id}>
+                          <Typography variant="caption">
+                            `{message.firstName} {message.lastName}`
+                          </Typography>
+                          <Typography
+                            variant="body1"
+                            style={{ margin: "5px 0" }}
+                          >
+                            {message.message}
+                          </Typography>
+                          <div
+                            style={{ display: "flex", justifyContent: "right" }}
+                          >
+                            <Typography variant="caption">
+                              {message.date
+                                .toString()
+                                .split("T")[0]
+                                .split("-")
+                                .reverse()
+                                .join("-")}
+                            </Typography>
+                          </div>
+                        </Paper>
+                      );
+                    })
+                  : null}
 
                 {/* NEW REPLY */}
-                <TextField
-                  id="standard-multiline-static"
-                  label="Add new reply..."
-                  multiline
-                  rows="2"
-                  placeholder="Type here..."
-                  className={classes.textField}
-                  margin="normal"
-                  variant="filled"
-                />
+                <form
+                  onSubmit={event =>
+                    this.props.addNewMessage(
+                      event,
+                      this.props.userID,
+                      this.props.ticketID,
+                      this.props.message,
+                      new Date()
+                    )
+                  }
+                >
+                  <TextField
+                    id="standard-multiline-static"
+                    name="message"
+                    label="Add new reply..."
+                    multiline
+                    rows="2"
+                    placeholder="Type here..."
+                    className={classes.textField}
+                    margin="normal"
+                    variant="filled"
+                    onChange={this.props.onInputChange}
+                    value={this.props.message}
+                    fullWidth
+                  />
 
-                <div style={{ display: "flex", justifyContent: "right" }}>
-                  {/* ADD REPLY BUTTON*/}
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.actionButton}
-                  >
-                    ADD REPLY
-                  </Button>
-                </div>
+                  <div style={{ display: "flex", justifyContent: "right" }}>
+                    {/* ADD REPLY BUTTON*/}
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      className={classes.actionButton}
+                    >
+                      ADD REPLY
+                    </Button>
+                  </div>
+                </form>
 
                 {/* RETURN BUTTON */}
                 <Button
@@ -182,7 +224,11 @@ const mapStateToProps = state => {
     ticketTitle: state.ticketReducer.title,
     ticketDescription: state.ticketReducer.description,
     ticketCreationDate: state.ticketReducer.created,
-    ticketStatus: state.ticketReducer.status
+    ticketStatus: state.ticketReducer.status,
+
+    // MESSAGES DATA
+    message: state.ticketReducer.message,
+    messages: state.ticketReducer.messages
   };
 };
 
@@ -198,7 +244,22 @@ const mapDispatchToProps = dispatch => {
     },
 
     getTicket: (userID, ticketID) => {
-      getTicketApi.getTicket(dispatch, userID, ticketID);
+      return getTicketApi.getTicket(dispatch, userID, ticketID);
+    },
+
+    addNewMessage: (event, userID, ticketID, message, date) => {
+      event.preventDefault();
+      return addNewMessageApi.addMessage(
+        dispatch,
+        userID,
+        ticketID,
+        message,
+        date
+      );
+    },
+
+    getMessages: (userID, ticketID) => {
+      return getMessagesApi.getMessages(dispatch, userID, ticketID);
     }
   };
 };

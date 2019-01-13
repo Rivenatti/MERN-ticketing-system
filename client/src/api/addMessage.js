@@ -1,22 +1,13 @@
 import axios from "axios";
 import { HANDLE_ERROR } from "../actions/actions";
 
-const createTicket = (
-  dispatch,
-  userID,
-  title,
-  description,
-  dateOfCreation,
-  status,
-  history
-) => {
+const addMessage = (dispatch, userID, ticketID, message, date) => {
   axios
-    .post("/createTicket", {
+    .post("/addMessage", {
       userID,
-      title,
-      description,
-      dateOfCreation,
-      status
+      ticketID,
+      message,
+      date
     })
     .then(result => {
       // Refresh page on success
@@ -30,4 +21,4 @@ const createTicket = (
     });
 };
 
-export default { createTicket };
+export default { addMessage };

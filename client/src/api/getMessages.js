@@ -1,16 +1,16 @@
 import axios from "axios";
-import { HANDLE_ERROR, GET_TICKET } from "../actions/actions";
+import { HANDLE_ERROR, GET_MESSAGES } from "../actions/actions";
 
-async function getTicket(dispatch, userID, ticketID) {
+async function getMessages(dispatch, userID, ticketID) {
   await axios
-    .post(`/get/${ticketID}`, {
+    .post(`/getMessages/${ticketID}`, {
       userID,
       ticketID
     })
     .then(result => {
       return dispatch({
-        type: GET_TICKET,
-        ticket: result.data.ticket
+        type: GET_MESSAGES,
+        messages: result.data.messages
       });
     })
     .catch(error => {
@@ -21,4 +21,4 @@ async function getTicket(dispatch, userID, ticketID) {
     });
 }
 
-export default { getTicket };
+export default { getMessages };

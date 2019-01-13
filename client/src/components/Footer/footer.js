@@ -23,7 +23,7 @@ const footer = props => {
     <div>
       <AppBar position="static" color="primary">
         <Typography color="inherit" className={classes.footerToolbar}>
-          Copyright &copy; 2018{" "}
+          Copyright &copy; 2018/2019{" "}
           <a href="https://msulewski.pl/" className={classes.aLink}>
             Marcin Sulewski
           </a>

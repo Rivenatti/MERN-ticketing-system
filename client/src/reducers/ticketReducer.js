@@ -5,6 +5,7 @@ import {
   GET_USER,
   GET_ALL_TICKETS,
   GET_USER_TICKETS,
+  GET_MESSAGES,
   RESET_STATE,
   TICKET_DIALOG_OPEN,
   ADMIN_TICKET_DIALOG_OPEN
@@ -37,6 +38,14 @@ const INITIAL_STATE = {
 
   // Array of user tickets to display on the dashboard
   userTickets: [],
+
+  //----------------- TICKET MESSAGES -----------------
+
+  // Add new ticket message
+  message: "",
+
+  // Get all messages
+  messages: [],
 
   //----------------- ADMIN DASHBOARD TICKET -----------------
 
@@ -87,6 +96,10 @@ const ticketReducer = (state = INITIAL_STATE, action) => {
 
     case GET_ALL_TICKETS: {
       return Object.assign({}, state, { allTickets: action.tickets });
+    }
+
+    case GET_MESSAGES: {
+      return Object.assign({}, state, { messages: action.messages });
     }
 
     case TICKET_DIALOG_OPEN: {

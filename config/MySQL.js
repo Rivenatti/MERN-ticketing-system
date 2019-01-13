@@ -20,6 +20,9 @@ const createUsersTableQuery = require("../api/MySQL_queries/registration/createU
 const checkIfTicketsTableExistsQuery = require("../api/MySQL_queries/ticket/checkIfTicketsTableExistsQuery");
 const createTicketsTableQuery = require("../api/MySQL_queries/ticket/createTicketsTableQuery");
 
+const checkIfMessagesTableExistsQuery = require("../api/MySQL_queries/message/checkIfMessagesTableExistsQuery");
+const createMessagesTableQuery = require("../api/MySQL_queries/message/createMessagesTableQuery");
+
 // Connection settings
 const MySQLConnection = mysql.createConnection(MySQL_config);
 
@@ -46,11 +49,24 @@ MySQLConnection.query(checkIfUsersTableExistsQuery, (err, result) => {
 MySQLConnection.query(checkIfTicketsTableExistsQuery, (err, result) => {
   // Error handling
   if (err) console.log("Error " + err);
-  // If users table doesn't exist, create one
+  // If tickets table doesn't exist, create one
   else if (result.length === 0) {
     MySQLConnection.query(createTicketsTableQuery, (err, response) => {
       if (err) console.log("MySQL Error: " + err);
       else console.log("Tickets table has been created successfully...");
+    });
+  }
+});
+
+// Check if messages table exists in the database
+MySQLConnection.query(checkIfMessagesTableExistsQuery, (err, result) => {
+  // Error handling
+  if (err) console.log("Error " + err);
+  // If messages table doesn't exist, create one
+  else if (result.length === 0) {
+    MySQLConnection.query(createMessagesTableQuery, (err, response) => {
+      if (err) console.log("MySQL Error: " + err);
+      else console.log("Messages table has been created successfully...");
     });
   }
 });

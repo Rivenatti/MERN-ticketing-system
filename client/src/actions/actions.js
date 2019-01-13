@@ -22,6 +22,7 @@ export const GET_USER = "GET_USER";
 // Tickets
 export const TICKET_INPUT_CHANGED = "TICKET_INPUT_CHANGED";
 export const GET_TICKET = "GET_TICKET";
+export const GET_MESSAGES = "GET_MESSAGES";
 
 export const GET_NEW_TICKETS = "GET_NEW_TICKETS";
 export const GET_IN_PROGRESS_TICKETS = "GET_IN_PROGRESS_TICKETS";

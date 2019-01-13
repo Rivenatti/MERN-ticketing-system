@@ -5,11 +5,11 @@ module.exports = (req, res, next) => {
   const decoded = jwt.verify(req.cookies.token, JWT_KEY);
 
   // Token decoded data
-  d_userID = decoded.userID;
-  d_userRole = decoded.role;
+  let d_userID = decoded.userID;
+  let d_userRole = decoded.role;
 
   // Request data
-  r_userID = req.body.userID;
+  let r_userID = req.body.userID;
 
   try {
     switch (req._parsedUrl.path.split("/")[1]) {
@@ -56,6 +56,16 @@ module.exports = (req, res, next) => {
       // Get all user's tickets
       case "getUserTickets": {
         return d_userID === r_userID && next();
+      }
+
+      // Add new message
+      case "addMessage": {
+        return (d_userID === r_userID || d_userRole === "admin") && next();
+      }
+
+      // Add new message
+      case "getMessages": {
+        return (d_userID === r_userID || d_userRole === "admin") && next();
       }
 
       default:

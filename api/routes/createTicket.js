@@ -13,7 +13,6 @@ const insertTicketQuery = require("../MySQL_queries/ticket/insertTicketQuery");
 
 // Create route to '/createTicket'
 createTicket.post("/createTicket", checkAuth, (req, res, next) => {
-  console.log("works");
   // Assign request values to the variables
   const { userID, title, description, dateOfCreation, status } = req.body;
 
