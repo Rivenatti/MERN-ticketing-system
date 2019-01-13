@@ -21,6 +21,7 @@ import Logout from "./components/Logout/Logout";
 import AdminTicket from "./components/Ticket/AdminTicket/AdminTicket";
 import UserTicket from "./components/Ticket/UserTicket/UserTicket";
 import NotFound from "./components/NotFound/NotFound";
+import Profile from "./components/Profile/Profile";
 
 class App extends Component {
   render() {
@@ -68,6 +69,7 @@ class App extends Component {
                 component={UserTicket}
               />
               <PrivateRoute exact path="/logout" component={Logout} />
+              <PrivateRoute exact path="/profile" component={Profile} />
               <Route component={NotFound} />
             </Switch>
           </div>

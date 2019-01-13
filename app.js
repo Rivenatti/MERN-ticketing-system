@@ -79,6 +79,10 @@ app.use("/", userTicketDelete);
 const ticketStatusChangedRoute = require("./api/routes/changeTicketStatus");
 app.use("/", ticketStatusChangedRoute);
 
+// Delete user route
+const deleteUserRoute = require("./api/routes/deleteUser");
+app.use("/", deleteUserRoute);
+
 //----- Error handling routes
 app.use((req, res, next) => {
   const error = new Error("Error 404: Page not found.");

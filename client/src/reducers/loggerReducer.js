@@ -25,6 +25,9 @@ const loggedInReducer = (state = INITIAL_STATE, action) => {
       return Object.assign({}, state, {
         token: true,
         userID: decoded.userID,
+        userName: `${decoded.firstName} ${decoded.lastName}`,
+        email: decoded.email,
+        accountCreated: decoded.created,
         role: decoded.role,
         serverErrors: []
       });
