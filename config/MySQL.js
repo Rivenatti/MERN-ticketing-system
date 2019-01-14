@@ -2,12 +2,7 @@ if (process.env.NODE_ENV === "development") {
   MySQL_config = require("./config").MySQL_config;
 } else {
   //----- MySQL config
-  MySQL_config = {
-    host: "",
-    user: "",
-    password: "",
-    database: ""
-  };
+  MySQL_config = process.env.MySQL_config;
 }
 
 // Require mysql

@@ -54,7 +54,7 @@ class Navbar extends Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <Typography variant="h4" color="inherit" className={classes.grow}>
+            <Typography variant="h5" color="inherit" className={classes.grow}>
               <Link to="/" className={classes.link}>
                 Ticketing System
               </Link>

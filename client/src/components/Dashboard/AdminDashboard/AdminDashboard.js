@@ -272,7 +272,6 @@ class AdminDashboard extends Component {
             indicatorColor="primary"
             textColor="primary"
             centered={true}
-            variant="scrollable"
             scrollButtons="off"
           >
             <Tab label="New" icon={<AnnoucementIcon />} />

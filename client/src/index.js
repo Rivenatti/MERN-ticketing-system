@@ -7,7 +7,7 @@ import * as serviceWorker from "./serviceWorker";
 import axios from "axios";
 
 import App from "./App";
-import { createStore, applyMiddleware } from "redux";
+import { createStore, applyMiddleware, compose } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import rootReducer from "./reducers/rootReducer";
@@ -15,11 +15,8 @@ import rootReducer from "./reducers/rootReducer";
 import { LOGGED_IN } from "./actions/actions";
 
 // Create redux store
-const store = createStore(
-  rootReducer,
-  applyMiddleware(thunk),
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(rootReducer, composeEnhancer(applyMiddleware(thunk)));
 
 // Check for cookies on page reload in the browser
 let token = cookie.load("token");

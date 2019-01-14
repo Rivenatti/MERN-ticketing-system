@@ -31,7 +31,8 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    padding: "2rem"
   },
 
   icon: {
@@ -49,9 +50,13 @@ const styles = {
   },
 
   button: {
-    height: "3rem",
-    fontSize: "1.5rem",
+    minHeight: "3rem",
+    fontSize: "1rem",
     marginBottom: 20
+  },
+
+  link: {
+    textDecoration: "none"
   }
 };
 

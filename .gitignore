@@ -11,9 +11,6 @@ package-lock.json
 # testing
 /coverage
 
-#config
-/config/config.js
-
 # production
 /build
 

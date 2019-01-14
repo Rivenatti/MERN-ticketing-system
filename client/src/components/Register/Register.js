@@ -33,7 +33,7 @@ import CloseIcon from "@material-ui/icons/Close";
 // Material UI custom styles
 const styles = {
   registerItem: {
-    marginTop: "20vh"
+    margin: "12vh 0"
   },
 
   registerInput: {
@@ -147,14 +147,14 @@ class Register extends Component {
                 !this.props.firstNameInputFocused &&
                 this.props.firstNameInputError
               }
-              aria-describedby="component-error-text"
+              aria-describedby="firstName-error-text"
               fullWidth
               required
               className={classes.registerInput}
             >
-              <InputLabel htmlFor="component-error">First name</InputLabel>
+              <InputLabel htmlFor="firstName-error">First name</InputLabel>
               <Input
-                id="component-error"
+                id="firstName"
                 name="firstNameInput"
                 value={this.props.firstNameInput}
                 onChange={this.props.inputChanged}
@@ -163,7 +163,7 @@ class Register extends Component {
               />
 
               {/* FIRSTNAME INPUT ERRORS */}
-              <FormHelperText id="component-error-text">
+              <FormHelperText id="firstName-error-text">
                 {!this.props.firstNameInputFocused &&
                   this.props.firstNameInputError &&
                   "First name format invalid."}
@@ -176,14 +176,14 @@ class Register extends Component {
                 !this.props.lastNameInputFocused &&
                 this.props.lastNameInputError
               }
-              aria-describedby="component-error-text"
+              aria-describedby="lastName-error-text"
               fullWidth
               required
               className={classes.registerInput}
             >
-              <InputLabel htmlFor="component-error">Last name</InputLabel>
+              <InputLabel htmlFor="lastName">Last name</InputLabel>
               <Input
-                id="component-error"
+                id="lastName"
                 name="lastNameInput"
                 value={this.props.lastNameInput}
                 onChange={this.props.inputChanged}
@@ -192,7 +192,7 @@ class Register extends Component {
               />
 
               {/* LASTNAME INPUT ERRORS */}
-              <FormHelperText id="component-error-text">
+              <FormHelperText id="lastName-error-text">
                 {!this.props.lastNameInputFocused &&
                   this.props.lastNameInputError &&
                   "Last name format invalid."}
@@ -204,14 +204,14 @@ class Register extends Component {
               error={
                 !this.props.emailInputFocused && this.props.emailInputError
               }
-              aria-describedby="component-error-text"
+              aria-describedby="email-error-text"
               fullWidth
               required
               className={classes.registerInput}
             >
-              <InputLabel htmlFor="component-error">Email</InputLabel>
+              <InputLabel htmlFor="email">Email</InputLabel>
               <Input
-                id="component-error"
+                id="email"
                 name="emailInput"
                 value={this.props.emailInput}
                 onChange={this.props.inputChanged}
@@ -220,7 +220,7 @@ class Register extends Component {
               />
 
               {/* EMAIL INPUT ERRORS */}
-              <FormHelperText id="component-error-text">
+              <FormHelperText id="email-error-text">
                 {!this.props.emailInputFocused &&
                   this.props.emailInputError &&
                   "Email format invalid."}
@@ -233,14 +233,14 @@ class Register extends Component {
                 !this.props.passwordInputFocused &&
                 this.props.passwordInputError
               }
-              aria-describedby="component-error-text"
+              aria-describedby="password-error-text"
               fullWidth
               required
               className={classes.registerInput}
             >
-              <InputLabel htmlFor="component-error">Password</InputLabel>
+              <InputLabel htmlFor="password">Password</InputLabel>
               <Input
-                id="component-error"
+                id="password"
                 name="passwordInput"
                 type="password"
                 value={this.props.passwordInput}
@@ -250,7 +250,7 @@ class Register extends Component {
               />
 
               {/* PASSWORD INPUT ERRORS */}
-              <FormHelperText id="component-error-text">
+              <FormHelperText id="password-error-text">
                 {!this.props.passwordInputFocused &&
                   this.props.passwordInputError &&
                   "Password format invalid."}
@@ -263,16 +263,16 @@ class Register extends Component {
                 !this.props.confirmPasswordInputFocused &&
                 this.props.confirmPasswordInputError
               }
-              aria-describedby="component-error-text"
+              aria-describedby="confirmPassword-error-text"
               fullWidth
               required
               className={classes.registerInput}
             >
-              <InputLabel htmlFor="component-error">
+              <InputLabel htmlFor="confirmPassword">
                 Confirm password
               </InputLabel>
               <Input
-                id="component-error"
+                id="confirmPassword"
                 name="confirmPasswordInput"
                 type="password"
                 value={this.props.confirmPasswordInput}
@@ -282,7 +282,7 @@ class Register extends Component {
               />
 
               {/* CONFIRM PASSWORD INPUT ERRORS */}
-              <FormHelperText id="component-error-text">
+              <FormHelperText id="confirmPassword-error-text">
                 {!this.props.confirmPasswordInputFocused &&
                   this.props.confirmPasswordInputError &&
                   "Passwords don't match."}

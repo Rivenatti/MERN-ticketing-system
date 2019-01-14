@@ -33,7 +33,7 @@ import CloseIcon from "@material-ui/icons/Close";
 // Material UI custom styles
 const styles = {
   loginItem: {
-    marginTop: "20vh"
+    margin: "20vh 0"
   },
 
   loginInput: {
@@ -143,7 +143,7 @@ class Login extends Component {
             >
               <InputLabel htmlFor="component-error">Email</InputLabel>
               <Input
-                id="component-error"
+                id="email"
                 name="emailInput"
                 value={this.props.emailInput}
                 onChange={this.props.inputChanged}
@@ -172,7 +172,7 @@ class Login extends Component {
             >
               <InputLabel htmlFor="component-error">Password</InputLabel>
               <Input
-                id="component-error"
+                id="password"
                 name="passwordInput"
                 type="password"
                 value={this.props.passwordInput}
