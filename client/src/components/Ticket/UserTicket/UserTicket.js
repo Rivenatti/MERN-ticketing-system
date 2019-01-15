@@ -138,7 +138,11 @@ class UserTicket extends Component {
                             {message.message}
                           </Typography>
                           <div
-                            style={{ display: "flex", justifyContent: "right" }}
+                            style={{
+                              display: "flex",
+                              justifyContent: "right",
+                              flexFlow: "row-reverse"
+                            }}
                           >
                             <Typography variant="caption">
                               {message.date
@@ -181,7 +185,13 @@ class UserTicket extends Component {
                     fullWidth
                   />
 
-                  <div style={{ display: "flex", justifyContent: "right" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "right",
+                      flexFlow: "row-reverse"
+                    }}
+                  >
                     {/* ADD REPLY BUTTON*/}
                     <Button
                       type="submit"
