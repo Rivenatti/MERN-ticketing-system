@@ -8,7 +8,7 @@ This is a ticketing system project. This project was created in purpose to learn
 - FRONTEND:
   React, React-router, Redux, Axios, Material-UI
 
-Application is a fully working ticketing system which allows user to: register, login with the own account, "CRUD" tickets stored in the database, display information about his/her account and delete the account. For security and user authentication I have used JSON Web Token which is stored in the browser's cookies. To hash passwords I have used bcrypt.js.
+Application is a fully working ticketing system which allows user to: register, login on the own account, "CRUD" tickets stored in the database, display information about his/her account and delete the account. For security and user authentication I have used JSON Web Token which is stored in the browser's cookies. To hash passwords I have used bcrypt.js.
 
 ## Get started
 
