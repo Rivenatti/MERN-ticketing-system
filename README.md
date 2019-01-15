@@ -19,6 +19,7 @@ Application is a fully working ticketing system which allows user to: register, 
 - Localhost configuration:
 
   > fill in MySQL connection object in 'config/config.js'
+  
   > fill in JWT_SECRET in 'config/config.js'
 
 - If project running on server set config vars:
