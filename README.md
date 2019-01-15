@@ -25,6 +25,7 @@ Application is a fully working ticketing system which allows user to: register, 
 - If project running on server set config vars:
 
   > 'MySQL_config' object (exactly the same way as it is saved in config.js file)
+  
   > 'JWT_SECRET' (exactly the same way as it is saved in config.js file)
 
 - Start the development server and client at once with:
